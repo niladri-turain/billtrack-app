@@ -125,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       const SizedBox(width: 8),
                       const Icon(Icons.arrow_upward, color: Colors.green, size: 16),
                       Text(
-                        '1.3% increased',
+                        '1.4% increased',
                         style: TextStyle(color: Colors.green.shade600, fontSize: 12),
                       ),
                     ],
