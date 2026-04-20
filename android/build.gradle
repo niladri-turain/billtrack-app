@@ -1,0 +1,33 @@
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.buildDir = '../build'
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+}
+
+subprojects {
+    project.evaluationDependsOn(':app')
+}
+
+// Force all plugins to use API 34 to avoid the broken android-35 on your system
+subprojects {
+    setupFlutterVersions(project)
+}
+
+// Apply SDK version override to all subprojects
+def setupFlutterVersions(Project project) {
+    project.ext.flutter = [
+            compileSdkVersion: 35,
+            minSdkVersion: 21,
+            targetSdkVersion: 35,
+    ]
+}
+
+tasks.register("clean", Delete) {
+    delete rootProject.buildDir
+}
