@@ -21,4 +21,7 @@ class AppColors {
   static const Color orangeGradientStart = Color(0xFFFFAE81);
   static const Color orangeGradientEnd = Color(0xFFEA6B23);
   static const Color lightGrey = Color(0xFFC7C7C7);
+  static const Color selectedItemBg = Color(0xFFEAFAEC);
+  static const Color checkboxGreen = Color(0xFF27C840);
+  static const Color selectedProductBg = Color(0xFF40599B);
 }

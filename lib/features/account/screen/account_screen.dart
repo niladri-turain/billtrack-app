@@ -87,14 +87,14 @@ class _AccountScreenState extends State<AccountScreen> {
                 children: [
                   Expanded(
                     child: _buildReportCard(
-                      imagePath: AppImagesPng.transaction,
+                      imagePath: AppImagesPng.salesReport,
                       title: 'Sales report',
                     ),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
                     child: _buildReportCard(
-                      imagePath: AppImagesPng.product,
+                      imagePath: AppImagesPng.activeProducts,
                       title: 'Active products',
                     ),
                   ),
@@ -199,8 +199,8 @@ class _AccountScreenState extends State<AccountScreen> {
         children: [
           Image.asset(
             imagePath,
-            height: 28,
-            width: 28,
+            height: 22,
+            width: 22,
           ),
           const SizedBox(height: 12),
           Text(

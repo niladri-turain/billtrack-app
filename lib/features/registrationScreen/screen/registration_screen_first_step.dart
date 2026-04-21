@@ -95,7 +95,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   ),
                   const SizedBox(height: 15),
                   SizedBox(
-                    width: 135,
+                    width:150,
                     height: 37,
                     child: ElevatedButton(
                       onPressed: () {
