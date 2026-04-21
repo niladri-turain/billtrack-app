@@ -96,7 +96,7 @@ class _ProductScreenState extends State<ProductScreen> {
         children: [
           Expanded(
             child: ListView.builder(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 10),
               itemCount: _categories.length,
               itemBuilder: (context, index) {
                 return _buildCategoryTile(_categories[index]);
@@ -110,44 +110,62 @@ class _ProductScreenState extends State<ProductScreen> {
   }
 
   Widget _buildCategoryTile(Map<String, dynamic> category) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 5,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Theme(
-        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-        child: ExpansionTile(
-          initiallyExpanded: category['isExpanded'],
-          title: Text(
-            category['title'],
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 14,
-              color: Colors.black87,
+    return Center(
+      child: Container(
+
+
+        margin: const EdgeInsets.only(bottom: 10),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 5,
+              offset: const Offset(0, 2),
             ),
-          ),
-          onExpansionChanged: (bool expanded) {
-            setState(() {
-              category['isExpanded'] = expanded;
-            });
-          },
-          collapsedBackgroundColor: Colors.white,
-          backgroundColor: const Color(0xFFFFAE81).withOpacity(0.7),
-          children: [
-            const Divider(height: 1, thickness: 0.5),
-            ...category['items'].map<Widget>((item) {
-              return _buildProductItem(item);
-            }).toList(),
           ],
+        ),
+        child: Theme(
+          data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+          child: ExpansionTile(
+
+            initiallyExpanded: category['isExpanded'],
+            tilePadding: const EdgeInsets.symmetric(horizontal: 16),
+            title: SizedBox(
+
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  category['title'],
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ),
+            onExpansionChanged: (bool expanded) {
+              setState(() {
+                category['isExpanded'] = expanded;
+              });
+            },
+            collapsedBackgroundColor: Colors.white,
+            backgroundColor: const Color(0xFFFFAE81),
+            collapsedShape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5),
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5),
+            ),
+            children: [
+              const Divider(height: 1, thickness: 0.5),
+              ...category['items'].map<Widget>((item) {
+                return _buildProductItem(item);
+              }).toList(),
+            ],
+          ),
         ),
       ),
     );
@@ -208,7 +226,7 @@ class _ProductScreenState extends State<ProductScreen> {
               children: [
                 const Text(
                   'Selected Product',
-                  style: TextStyle(color: Colors.white70, fontSize: 12),
+                  style: TextStyle(color: Colors.white, fontSize: 14),
                 ),
                 Text(
                   '$selectedCount',
