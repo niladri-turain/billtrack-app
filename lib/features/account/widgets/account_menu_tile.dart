@@ -26,7 +26,7 @@ class AccountMenuTile extends StatelessWidget {
     return InkWell(
       onTap: isSwitch ? null : onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
           color: isDelete ? AppColors.deleteBg : Colors.transparent,
         ),
@@ -52,11 +52,15 @@ class AccountMenuTile extends StatelessWidget {
               ),
             ),
             if (isSwitch)
-              Switch(
-                value: switchValue,
-                onChanged: onSwitchChanged,
-                activeColor: Colors.white,
-                activeTrackColor: AppColors.orange,
+              SizedBox(
+                height: 24,
+                child: Switch(
+                  value: switchValue,
+                  onChanged: onSwitchChanged,
+                  activeColor: Colors.white,
+                  activeTrackColor: AppColors.orange,
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
               )
             else if (!isDelete)
               const Icon(

@@ -37,7 +37,7 @@ class _AccountScreenState extends State<AccountScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Divider(thickness: 0.5),
+            const Divider(thickness: .1,),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
               child: Row(
@@ -70,12 +70,16 @@ class _AccountScreenState extends State<AccountScreen> {
                         MaterialPageRoute(builder: (context) => const ProfileScreen()),
                       );
                     },
-                    child: const Icon(Icons.edit_outlined, color: AppColors.orange),
+                    child: Image.asset(
+                      AppImagesPng.edit,
+                      height: 20,
+                      width: 20,
+                    ),
                   ),
                 ],
               ),
             ),
-            const Divider(thickness: 0.5),
+            const Divider(thickness: .1,),
             const SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -83,25 +87,27 @@ class _AccountScreenState extends State<AccountScreen> {
                 children: [
                   Expanded(
                     child: _buildReportCard(
-                      icon: Icons.pie_chart_outline,
+                      imagePath: AppImagesPng.transaction,
                       title: 'Sales report',
                     ),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
                     child: _buildReportCard(
-                      icon: Icons.inventory_2_outlined,
+                      imagePath: AppImagesPng.product,
                       title: 'Active products',
                     ),
                   ),
                 ],
               ),
             ),
+            const SizedBox(height: 16),
+            const Divider(thickness: .1,),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
               child: Text(
                 'Settings',
-                style: TextStyle(color: Colors.grey, fontSize: 14),
+                style: TextStyle(color: AppColors.grey, fontSize: 16),
               ),
             ),
             AccountMenuTile(
@@ -180,17 +186,22 @@ class _AccountScreenState extends State<AccountScreen> {
     );
   }
 
-  Widget _buildReportCard({required IconData icon, required String title}) {
+  Widget _buildReportCard({required String imagePath, required String title}) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey.shade200),
+        color: AppColors.lightGreyBg,
+        border: Border.all(color: AppColors.lightGrey.withOpacity(0.75)),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, size: 28),
+          Image.asset(
+            imagePath,
+            height: 28,
+            width: 28,
+          ),
           const SizedBox(height: 12),
           Text(
             title,

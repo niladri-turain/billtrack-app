@@ -20,4 +20,5 @@ class AppColors {
   static const Color saveButtonGreen = Color(0xFF28A745);
   static const Color orangeGradientStart = Color(0xFFFFAE81);
   static const Color orangeGradientEnd = Color(0xFFEA6B23);
+  static const Color lightGrey = Color(0xFFC7C7C7);
 }

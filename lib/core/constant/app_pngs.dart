@@ -26,5 +26,8 @@ class AppImagesPng {
   static const businessType = "assets/images/businessType.png";
   static const email = "assets/images/email.png";
   static const phone = "assets/images/phone.png";
+  static const edit = "assets/images/edit.png";
+  static const salesReport = "assets/images/salesReport.png";
+  static const activeProducts = "assets/images/activeProducts.png";
 
 }
