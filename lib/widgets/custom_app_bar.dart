@@ -20,6 +20,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: Colors.white,
       elevation: 0,
       scrolledUnderElevation: 0,
+      shape: const Border(
+        bottom: BorderSide(
+          color: Color(0x4D000000), // #0000004D
+          width: 0.5,
+        ),
+      ),
       leading: IconButton(
         icon: Container(
           padding: const EdgeInsets.all(8),

@@ -134,6 +134,7 @@ class _ProductScreenState extends State<ProductScreen> {
             tilePadding: const EdgeInsets.symmetric(horizontal: 16),
             title: SizedBox(
 
+
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
