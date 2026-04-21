@@ -93,36 +93,40 @@ class CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
               top: BorderSide(color: Color(0xFFE0E0E0), width: 0.8),
             ),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-            _buildNavItem(
-              selectedImage: AppImagesPng.homeSelect,
-              unselectedImage: AppImagesPng.homeUnselect,
-              label: 'Home',
-              index: 0,
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _buildNavItem(
+                    selectedImage: AppImagesPng.homeSelect,
+                    unselectedImage: AppImagesPng.homeUnselect,
+                    label: 'Home',
+                    index: 0,
+                  ),
+                  _buildNavItem(
+                    selectedImage: AppImagesPng.productSelect,
+                    unselectedImage: AppImagesPng.product,
+                    label: 'Product',
+                    index: 1,
+                  ),
+                  _buildCenterNavItem(AppImagesPng.bill, 2),
+                  _buildNavItem(
+                    selectedImage: AppImagesPng.invoiceSelect,
+                    unselectedImage: AppImagesPng.invoice,
+                    label: 'Invoice',
+                    index: 3,
+                  ),
+                  _buildNavItem(
+                    selectedImage: AppImagesPng.accountSelect,
+                    unselectedImage: AppImagesPng.account,
+                    label: 'Account',
+                    index: 4,
+                  ),
+                ],
+              ),
             ),
-            _buildNavItem(
-              selectedImage: AppImagesPng.productSelect,
-              unselectedImage: AppImagesPng.product,
-              label: 'Product',
-              index: 1,
-            ),
-            _buildCenterNavItem(AppImagesPng.bill, 2),
-            _buildNavItem(
-              selectedImage: AppImagesPng.invoiceSelect,
-              unselectedImage:  AppImagesPng.invoice,
-              label: 'Invoice',
-              index: 3,
-            ),
-            _buildNavItem(
-              selectedImage: AppImagesPng.accountSelect,
-              unselectedImage:  AppImagesPng.account,
-              label: 'Account',
-              index: 4,
-            ),
-            ],
           ),
         ),
       ),
