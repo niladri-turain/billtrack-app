@@ -35,7 +35,7 @@ class _InvoiceListTileState extends State<InvoiceListTile> {
       },
       child: Container(
         margin: const EdgeInsets.only(bottom: 10),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(8),
@@ -78,7 +78,7 @@ class _InvoiceListTileState extends State<InvoiceListTile> {
                 ),
               ],
             ),
-            
+
             // Row 2: Date (Centered and separate)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 0),
@@ -92,7 +92,7 @@ class _InvoiceListTileState extends State<InvoiceListTile> {
                 ),
               ),
             ),
-            
+
             // Row 3: Phone and Amount
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -115,7 +115,7 @@ class _InvoiceListTileState extends State<InvoiceListTile> {
                 ),
               ],
             ),
-            
+
             if (_isExpanded) ...[
               const SizedBox(height: 0),
               // Dotted Line
@@ -141,6 +141,7 @@ class _InvoiceListTileState extends State<InvoiceListTile> {
                   _buildActionItem(AppImagesPng.view, 'Details', const Color(0xFF757575)),
                 ],
               ),
+              const SizedBox(height: 8),
             ]
           ],
         ),
