@@ -15,7 +15,7 @@ class HelpSupportScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Divider(thickness: 0.5),
+
             AccountMenuTile(
               iconPath: 'assets/images/help_support.png', // Using existing help icon for now
               title: 'Call Support',

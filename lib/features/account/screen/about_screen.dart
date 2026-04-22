@@ -12,7 +12,7 @@ class AboutScreen extends StatelessWidget {
       appBar: const CustomAppBar(title: 'About billtrack'),
       body: Column(
         children: [
-          const Divider(thickness: 0.5),
+
           AccountMenuTile(
             title: 'About Billtrack App',
             onTap: () {},
