@@ -30,5 +30,11 @@ class AppImagesPng {
   static const salesReport = "assets/images/salesReport.png";
   static const activeProducts = "assets/images/activeProducts.png";
   static const chartFlow = "assets/images/chartFlow.png";
+  static const question = "assets/images/question.png";
+  static const search = "assets/images/search.png";
+  static const message = "assets/images/message.png";
+  static const print = "assets/images/print.png";
+  static const view = "assets/images/view.png";
+  static const whatsapp = "assets/images/whatsapp.png";
 
 }

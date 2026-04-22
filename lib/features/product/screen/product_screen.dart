@@ -3,6 +3,8 @@ import 'package:billtrack/widgets/custom_app_bar.dart';
 import 'package:billtrack/widgets/custom_bottom_navigationbar.dart';
 import 'package:flutter/material.dart';
 
+import '../../../core/constant/app_pngs.dart';
+
 class ProductScreen extends StatefulWidget {
   const ProductScreen({super.key});
 
@@ -74,22 +76,18 @@ class _ProductScreenState extends State<ProductScreen> {
           }
         },
         actions: [
-          IconButton(icon: const Icon(Icons.search, color: Colors.black), onPressed: () {}),
-          IconButton(icon: const Icon(Icons.help_outline, color: Colors.black), onPressed: () {}),
-          Stack(
-            children: [
-              IconButton(icon: const Icon(Icons.notifications_none, color: Colors.black), onPressed: () {}),
-              Positioned(
-                right: 12,
-                top: 12,
-                child: Container(
-                  padding: const EdgeInsets.all(2),
-                  decoration: BoxDecoration(color: Colors.red, borderRadius: BorderRadius.circular(10)),
-                  constraints: const BoxConstraints(minWidth: 8, minHeight: 8),
-                ),
-              )
-            ],
+          Padding(
+            padding: const EdgeInsets.only(right: 20.0),
+            child: Image.asset(AppImagesPng.search, width: 18),
+          ),Padding(
+            padding: const EdgeInsets.only(right: 20.0),
+            child: Image.asset(AppImagesPng.question, width: 18),
           ),
+          Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: Image.asset(AppImagesPng.notification, width: 20),
+          ),
+        
         ],
       ),
       body: Column(

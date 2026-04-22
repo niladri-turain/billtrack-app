@@ -55,22 +55,8 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Stack(
               alignment: Alignment.center,
               children: [
-                const Icon(Icons.notifications_none, size: 30, color: Colors.black),
-                Positioned(
-                  right: 2,
-                  top: 15,
-                  child: Container(
-                    padding: const EdgeInsets.all(4),
-                    decoration: const BoxDecoration(
-                      color: Colors.redAccent,
-                      shape: BoxShape.circle,
-                    ),
-                    constraints: const BoxConstraints(
-                      minWidth: 10,
-                      minHeight: 10,
-                    ),
-                  ),
-                )
+                 Image.asset(AppImagesPng.notification, width: 22),
+
               ],
             ),
           ),
@@ -113,34 +99,32 @@ class _HomeScreenState extends State<HomeScreen> {
                     style: TextStyle(color: Colors.grey, fontSize: 14),
                   ),
                   const SizedBox(height: 8),
-                  Row(
+                  const Row(
                     children: [
-                      const Text(
+                      Text(
                         '₹ 5104.00',
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(width: 8),
-                      const Icon(Icons.arrow_upward, color: Colors.green, size: 16),
+                      SizedBox(width: 8),
+                       Icon(Icons.arrow_upward, color: AppColors.saveGreenText, size: 16),
                       Text(
+
                         '1.4% increased',
-                        style: TextStyle(color: Colors.green.shade600, fontSize: 12),
+                        style: TextStyle(color: AppColors.saveGreenText, fontSize: 12,fontWeight: FontWeight.w600),
                       ),
                     ],
                   ),
                   const SizedBox(height: 20),
-                  // Placeholder for Chart Image
-                  Container(
-                    height: 150,
+                  // Chart Image
+                  SizedBox(
+                    height: 180,
                     width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Colors.orange.shade50.withOpacity(0.3),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: const Center(
-                      child: Icon(Icons.show_chart, color: AppColors.orange, size: 50),
+                    child: Image.asset(
+                      AppImagesPng.chartFlow,
+                      fit: BoxFit.contain,
                     ),
                   ),
                 ],
