@@ -29,5 +29,6 @@ class AppImagesPng {
   static const edit = "assets/images/edit.png";
   static const salesReport = "assets/images/salesReport.png";
   static const activeProducts = "assets/images/activeProducts.png";
+  static const chartFlow = "assets/images/chartFlow.png";
 
 }

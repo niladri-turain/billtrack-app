@@ -1,3 +1,4 @@
+import 'package:billtrack/core/constant/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class InvoiceListTile extends StatelessWidget {
@@ -20,7 +21,7 @@ class InvoiceListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.symmetric(horizontal: 12,vertical: 4),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
@@ -39,9 +40,9 @@ class InvoiceListTile extends StatelessWidget {
             children: [
               Text(
                 invoiceNo,
-                style: const TextStyle(
-                  color: Colors.orange,
-                  fontWeight: FontWeight.bold,
+                style:  const TextStyle(
+                  color: AppColors.orangeTitle,
+                  fontWeight: FontWeight.w700,
                   fontSize: 14,
                 ),
               ),
@@ -62,7 +63,7 @@ class InvoiceListTile extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 0),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -71,7 +72,7 @@ class InvoiceListTile extends StatelessWidget {
                 children: [
                   Text(
                     phone,
-                    style: const TextStyle(color: Colors.grey, fontSize: 12),
+                    style:  const TextStyle(color: AppColors.grey, fontSize: 12,fontWeight: FontWeight.w400),
                   ),
                 ],
               ),
@@ -83,7 +84,7 @@ class InvoiceListTile extends StatelessWidget {
                     style: const TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.w400,
-                      fontSize: 11,
+                      fontSize: 10,
                       decoration: TextDecoration.underline,
                     ),
                   ),
