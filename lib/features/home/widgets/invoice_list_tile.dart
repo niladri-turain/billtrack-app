@@ -2,6 +2,8 @@ import 'package:billtrack/core/constant/app_colors.dart';
 import 'package:billtrack/core/constant/app_pngs.dart';
 import 'package:flutter/material.dart';
 
+import '../../invoice/screen/invoice_view.dart';
+
 class InvoiceListTile extends StatefulWidget {
   final String invoiceNo;
   final String phone;
@@ -135,10 +137,22 @@ class _InvoiceListTileState extends State<InvoiceListTile> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _buildActionItem(AppImagesPng.message, 'SMS', const Color(0xFF2196F3)),
-                  _buildActionItem(AppImagesPng.whatsapp, 'Whatsapp', const Color(0xFF27C840)),
-                  _buildActionItem(AppImagesPng.print, 'Print', const Color(0xFFF44336)),
-                  _buildActionItem(AppImagesPng.view, 'Details', const Color(0xFF757575)),
+                  _buildActionItem(AppImagesPng.message, 'SMS', const Color(0xFF2196F3), () {
+                    // SMS logic here
+                  }),
+                  _buildActionItem(AppImagesPng.whatsapp, 'Whatsapp', const Color(0xFF27C840), () {
+                    // Whatsapp logic here
+                  }),
+                  _buildActionItem(AppImagesPng.print, 'Print', const Color(0xFFF44336), () {
+                    // Print logic here
+                  }),
+                  _buildActionItem(AppImagesPng.view, 'Details', const Color(0xFF757575), () {
+                    // Details logic here
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const InvoiceViewScreen()),
+                    );
+                  }),
                 ],
               ),
               const SizedBox(height: 8),
@@ -149,9 +163,9 @@ class _InvoiceListTileState extends State<InvoiceListTile> {
     );
   }
 
-  Widget _buildActionItem(String assetPath, String label, Color textColor) {
+  Widget _buildActionItem(String assetPath, String label, Color textColor, VoidCallback onTap) {
     return InkWell(
-      onTap: () {},
+      onTap: onTap,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [

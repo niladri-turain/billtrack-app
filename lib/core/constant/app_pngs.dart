@@ -36,5 +36,6 @@ class AppImagesPng {
   static const print = "assets/images/print.png";
   static const view = "assets/images/view.png";
   static const whatsapp = "assets/images/whatsapp.png";
+  static const billTrackLogo = "assets/images/billTrackLogo.png";
 
 }
