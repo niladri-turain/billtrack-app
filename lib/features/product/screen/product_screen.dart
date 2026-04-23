@@ -1,4 +1,5 @@
 import 'package:billtrack/core/constant/app_colors.dart';
+import 'package:billtrack/features/product/screen/set_price_screen.dart';
 import 'package:billtrack/widgets/custom_app_bar.dart';
 import 'package:billtrack/widgets/custom_bottom_navigationbar.dart';
 import 'package:flutter/material.dart';
@@ -238,7 +239,12 @@ class _ProductScreenState extends State<ProductScreen> {
               ],
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SetPriceScreen()),
+                );
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.orange,
                 shape: RoundedRectangleBorder(
