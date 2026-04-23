@@ -6,6 +6,7 @@ import 'package:billtrack/features/account/screen/profile_screen.dart';
 import 'package:billtrack/features/account/screen/subscription_screen.dart';
 import 'package:billtrack/features/account/screen/transaction_screen.dart';
 import 'package:billtrack/features/account/widgets/account_menu_tile.dart';
+import 'package:billtrack/features/product/screen/product_screen.dart';
 import 'package:billtrack/widgets/custom_app_bar.dart';
 import 'package:billtrack/widgets/custom_bottom_navigationbar.dart';
 import 'package:flutter/material.dart';
@@ -113,7 +114,12 @@ class _AccountScreenState extends State<AccountScreen> {
             AccountMenuTile(
               iconPath: AppImagesPng.itemMaster,
               title: 'Item Master',
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ProductScreen()),
+                );
+              },
             ),
             AccountMenuTile(
               iconPath: AppImagesPng.subscription,
