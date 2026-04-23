@@ -6,12 +6,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final List<Widget>? actions;
   final VoidCallback? onBackPress;
+  final bool? isInvoiceDetails;
 
   const CustomAppBar({
     super.key,
     required this.title,
     this.actions,
     this.onBackPress,
+    this.isInvoiceDetails = false,
   });
 
   @override
@@ -43,11 +45,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       actions: actions ??
           [
-            IconButton(
-              icon: const Icon(Icons.help_outline, color: Colors.black),
+            isInvoiceDetails==true?const SizedBox():  IconButton(
+              icon:  const Icon(Icons.help_outline, color: Colors.black),
               onPressed: () {},
             ),
-            Padding(
+            isInvoiceDetails==true?const SizedBox():   Padding(
               padding: const EdgeInsets.only(right: 16.0),
               child: Image.asset(AppImagesPng.notification, width: 22),
             ),
