@@ -37,7 +37,7 @@ class _InvoiceListTileState extends State<InvoiceListTile> {
       },
       child: Container(
         margin: const EdgeInsets.only(bottom: 10),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(8),
@@ -51,79 +51,90 @@ class _InvoiceListTileState extends State<InvoiceListTile> {
         ),
         child: Column(
           children: [
-            // Row 1: Invoice No and Status
+            // Row containing the 3 main columns
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  widget.invoiceNo,
-                  style: const TextStyle(
-                    color: AppColors.orangeTitle,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 16,
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFEAFAEC),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Text(
-                    widget.status,
-                    style: const TextStyle(
-                      color: Color(0xFF27C840),
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
+                // Column 1: Invoice No and Phone
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.invoiceNo,
+                      style: const TextStyle(
+                        color: AppColors.orangeTitle,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 16,
+                      ),
                     ),
-                  ),
+                    const SizedBox(height: 3,),
+                    Text(
+                      widget.phone,
+                      style: const TextStyle(
+                        color: Color(0xFF757575),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-
-            // Row 2: Date (Centered and separate)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 0),
-              child: Text(
-                widget.date,
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w400,
-                  fontSize: 12,
-                  decoration: TextDecoration.underline,
+                // Column 2: Date
+                Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 15),
+                      child: Text(
+                        widget.date,
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 12,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ),
-
-            // Row 3: Phone and Amount
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  widget.phone,
-                  style: const TextStyle(
-                    color: Color(0xFF757575),
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                Text(
-                  '₹ ${widget.amount}',
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                    color: Colors.black,
-                  ),
+                // Column 3: Status and Amount
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFEAFAEC),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Text(
+                        widget.status,
+                        style: const TextStyle(
+                          color: Color(0xFF27C840),
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 8,),
+                    Text(
+                      '₹ ${widget.amount}',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 15,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
 
             if (_isExpanded) ...[
-              const SizedBox(height: 0),
+              const SizedBox(height: 8),
               // Dotted Line
               Row(
                 children: List.generate(
-                  100,
+                  80,
                   (index) => Expanded(
                     child: Container(
                       color: index % 2 == 0 ? Colors.transparent : Colors.grey.withOpacity(0.3),
@@ -132,8 +143,8 @@ class _InvoiceListTileState extends State<InvoiceListTile> {
                   ),
                 ),
               ),
-              const SizedBox(height: 8),
-              // Action Icons Row with small images and labels
+              const SizedBox(height: 12),
+              // Action Icons Row
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -147,7 +158,6 @@ class _InvoiceListTileState extends State<InvoiceListTile> {
                     // Print logic here
                   }),
                   _buildActionItem(AppImagesPng.view, 'Details', const Color(0xFF757575), () {
-                    // Details logic here
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => const InvoiceViewScreen()),
@@ -155,7 +165,6 @@ class _InvoiceListTileState extends State<InvoiceListTile> {
                   }),
                 ],
               ),
-              const SizedBox(height: 8),
             ]
           ],
         ),
