@@ -40,5 +40,8 @@ class AppImagesPng {
   static const defaultImage = "assets/images/defaultImage.png";
   static const edit1 = "assets/images/edit1.png";
   static const uploadImage = "assets/images/uploadImage.png";
+  static const firstLogo = "assets/images/firstLogo.png";
+  static const secondLogo = "assets/images/secondLogo.png";
+
 
 }
