@@ -3,7 +3,20 @@ import 'package:billtrack/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 
 class InvoiceViewScreen extends StatelessWidget {
-  const InvoiceViewScreen({super.key});
+  final String? invoiceNo;
+  final String? date;
+  final String? customerName;
+  final String? customerPhone;
+  final String? totalAmount;
+
+  const InvoiceViewScreen({
+    super.key,
+    this.invoiceNo,
+    this.date,
+    this.customerName,
+    this.customerPhone,
+    this.totalAmount,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -56,9 +69,9 @@ class InvoiceViewScreen extends StatelessWidget {
                     padding: const EdgeInsets.all(12.0),
                     child: Column(
                       children: [
-                        _buildInfoRow("Invoice No : TS252612531", "Billed By : Mousin"),
+                        _buildInfoRow("Invoice No : ${invoiceNo ?? 'TS252612531'}", "Billed By : Mousin"),
                         const SizedBox(height: 4),
-                        _buildInfoRow("Date : 24-10-2025", "Time : 11 : 25 AM"),
+                        _buildInfoRow("Date : ${date?.split(' ').first ?? '24-10-2025'}", "Time : ${date?.contains(' ') == true ? date!.split(' ').last : '11 : 25 AM'}"),
                       ],
                     ),
                   ),
@@ -68,7 +81,7 @@ class InvoiceViewScreen extends StatelessWidget {
                   // Customer Info
                   Padding(
                     padding: const EdgeInsets.all(12.0),
-                    child: _buildInfoRow("Name : Rohan", "Number : 62903 97293"),
+                    child: _buildInfoRow("Name : ${customerName ?? 'Rohan'}", "Number : ${customerPhone ?? '62903 97293'}"),
                   ),
 
                   _buildDottedDivider(),
@@ -124,13 +137,13 @@ class InvoiceViewScreen extends StatelessWidget {
                   _buildDottedDivider(),
 
                   // Final Total
-                  const Padding(
-                    padding: EdgeInsets.all(12.0),
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text("Payment : Cash", style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14)),
-                        Text("Total Amount : 1405.00", style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14)),
+                        const Text("Payment : Cash", style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14)),
+                        Text("Total Amount : ${totalAmount ?? '1405.00'}", style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14)),
                       ],
                     ),
                   ),

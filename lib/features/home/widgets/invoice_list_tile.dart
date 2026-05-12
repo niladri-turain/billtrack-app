@@ -160,7 +160,14 @@ class _InvoiceListTileState extends State<InvoiceListTile> {
                   _buildActionItem(AppImagesPng.view, 'Details', const Color(0xFF757575), () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const InvoiceViewScreen()),
+                      MaterialPageRoute(
+                        builder: (context) => InvoiceViewScreen(
+                          invoiceNo: widget.invoiceNo,
+                          date: widget.date,
+                          customerPhone: widget.phone,
+                          totalAmount: widget.amount,
+                        ),
+                      ),
                     );
                   }),
                 ],

@@ -31,11 +31,13 @@ class LoginTextField extends StatelessWidget {
             child: TextField(
               controller: controller,
               keyboardType: TextInputType.phone,
+              maxLength: 10,
               decoration: const InputDecoration(
                 hintText: AppStrings.phoneNumberHint,
                 hintStyle: TextStyle(color: Colors.grey, fontSize: 16),
                 border: InputBorder.none,
                 isDense: true,
+                counterText: "",
               ),
             ),
           ),

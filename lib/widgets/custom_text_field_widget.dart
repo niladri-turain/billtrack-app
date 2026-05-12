@@ -8,6 +8,8 @@ class CustomTextFieldWidget extends StatelessWidget {
   final List<String>? dropDownItems;
   final Widget? suffixIcon;
   final Color? borderColor;
+  final TextInputType? keyboardType;
+  final int? maxLength;
 
   const CustomTextFieldWidget({
     super.key,
@@ -17,6 +19,8 @@ class CustomTextFieldWidget extends StatelessWidget {
     this.dropDownItems,
     this.suffixIcon,
     this.borderColor,
+    this.keyboardType,
+    this.maxLength,
   });
 
   @override
@@ -58,6 +62,8 @@ class CustomTextFieldWidget extends StatelessWidget {
             )
           : TextField(
               controller: controller,
+              keyboardType: keyboardType,
+              maxLength: maxLength,
               textAlignVertical: TextAlignVertical.center,
               decoration: InputDecoration(
                 hintText: hintText,
@@ -65,6 +71,7 @@ class CustomTextFieldWidget extends StatelessWidget {
                 contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
                 border: InputBorder.none,
                 suffixIcon: suffixIcon,
+                counterText: "",
               ),
             ),
     );

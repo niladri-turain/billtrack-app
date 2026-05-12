@@ -65,20 +65,26 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     ),
                   ),
                   const SizedBox(height: 32),
-                  const CustomTextFieldWidget(
+                  CustomTextFieldWidget(
+                    controller: ownerNameController,
                     hintText: 'Owner name',
                   ),
                   const CustomTextFieldWidget(
                     hintText: 'GST Number(Optional)',
                     suffixIcon: Icon(Icons.check_circle, color: Colors.green, size: 20),
                   ),
-                  const CustomTextFieldWidget(
+                  CustomTextFieldWidget(
+                    controller: whatsappController,
                     hintText: 'Whatsapp number',
+                    keyboardType: TextInputType.phone,
+                    maxLength: 10,
                     borderColor: Colors.red,
-                    suffixIcon: Icon(Icons.cancel, color: Colors.red, size: 20),
+                    suffixIcon: const Icon(Icons.cancel, color: Colors.red, size: 20),
                   ),
-                  const CustomTextFieldWidget(
+                  CustomTextFieldWidget(
+                    controller: emailController,
                     hintText: 'Email address',
+                    keyboardType: TextInputType.emailAddress,
                   ),
                   const CustomTextFieldWidget(
                     hintText: 'Business type',
@@ -90,8 +96,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     isDropDown: true,
                     dropDownItems: ['West Bengal', 'Delhi', 'Mumbai'],
                   ),
-                  const CustomTextFieldWidget(
+                  CustomTextFieldWidget(
+                    controller: pinCodeController,
                     hintText: 'Pin code',
+                    keyboardType: TextInputType.number,
+                    maxLength: 6,
                   ),
                   const SizedBox(height: 15),
                   SizedBox(
