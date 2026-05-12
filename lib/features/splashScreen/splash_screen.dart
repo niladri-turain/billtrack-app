@@ -1,5 +1,6 @@
 import 'package:billtrack/core/constant/app_colors.dart';
 import 'package:billtrack/core/constant/app_pngs.dart';
+import 'package:billtrack/features/loginScreen/screen/login_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../registrationScreen/screen/registration_screen_first_step.dart';
@@ -98,7 +99,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
     if (mounted) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const RegistrationScreen()),
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
       );
     }
   }
