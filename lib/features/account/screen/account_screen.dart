@@ -1,5 +1,7 @@
 import 'package:billtrack/core/constant/app_colors.dart';
 import 'package:billtrack/core/constant/app_pngs.dart';
+import 'package:billtrack/features/salesReport/screen/sales_reports.dart';
+import 'package:billtrack/features/activeProduct/screen/active_product_screen.dart';
 import 'package:billtrack/features/account/screen/about_screen.dart';
 import 'package:billtrack/features/account/screen/help_support_screen.dart';
 import 'package:billtrack/features/account/screen/profile_screen.dart';
@@ -87,16 +89,32 @@ class _AccountScreenState extends State<AccountScreen> {
               child: Row(
                 children: [
                   Expanded(
-                    child: _buildReportCard(
-                      imagePath: AppImagesPng.salesReport,
-                      title: 'Sales report',
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const SalesReportScreen()),
+                        );
+                      },
+                      child: _buildReportCard(
+                        imagePath: AppImagesPng.salesReport,
+                        title: 'Sales report',
+                      ),
                     ),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
-                    child: _buildReportCard(
-                      imagePath: AppImagesPng.activeProducts,
-                      title: 'Active products',
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const ActiveProductScreen()),
+                        );
+                      },
+                      child: _buildReportCard(
+                        imagePath: AppImagesPng.activeProducts,
+                        title: 'Active products',
+                      ),
                     ),
                   ),
                 ],
