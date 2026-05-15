@@ -1,5 +1,6 @@
 import 'package:billtrack/core/constant/app_colors.dart';
 import 'package:billtrack/core/constant/app_pngs.dart';
+import 'package:billtrack/features/salesReport/widgets/download_report_bottom_sheet.dart';
 import 'package:billtrack/features/salesReport/widgets/sales_summary_card.dart';
 import 'package:billtrack/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
@@ -79,17 +80,20 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                       ),
                     ],
                   ),
-                  Container(
-                    width: 45,
-                    height: 45,
-                    decoration: BoxDecoration(
-                      color: AppColors.orange,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: const Icon(
-                      Icons.file_download_outlined,
-                      color: Colors.white,
-                      size: 28,
+                  GestureDetector(
+                    onTap: () => DownloadReportBottomSheet.show(context),
+                    child: Container(
+                      width: 45,
+                      height: 45,
+                      decoration: BoxDecoration(
+                        color: AppColors.orange,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Icon(
+                        Icons.file_download_outlined,
+                        color: Colors.white,
+                        size: 28,
+                      ),
                     ),
                   ),
                 ],
