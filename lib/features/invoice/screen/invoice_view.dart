@@ -1,218 +1,263 @@
-import 'package:billtrack/core/constant/app_pngs.dart';
 import 'package:billtrack/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 
+import '../../../core/constant/app_pngs.dart';
+
 class InvoiceViewScreen extends StatelessWidget {
-  final String? invoiceNo;
-  final String? date;
-  final String? customerName;
-  final String? customerPhone;
-  final String? totalAmount;
+
 
   const InvoiceViewScreen({
     super.key,
-    this.invoiceNo,
-    this.date,
-    this.customerName,
-    this.customerPhone,
-    this.totalAmount,
+
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF2F5F9),
-      appBar: const CustomAppBar(title: 'Invoice Details', isInvoiceDetails: true, ),
+      backgroundColor: Colors.white,
+      appBar: const CustomAppBar(title: 'Invoice Details', isInvoiceDetails: true),
       body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            const SizedBox(height: 20,),
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(4),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 10,
-                    offset: const Offset(0, 5),
-                  ),
-                ],
-              ),
-              child: Column(
-                children: [
-                  const SizedBox(height: 20),
+            // Decathlon Header
+            const SizedBox(height: 20),
 
-                  Image.asset(AppImagesPng.billTrackLogo, height: 20, errorBuilder: (context, error, stackTrace) => const Icon(Icons.receipt_long, size: 20)),
-                  const Text(
-                    "Mousin's Kitchen Pvt. Ltd.",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 8),
-                  const Text("Phone Number : +91 6290 397200", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
-                  const SizedBox(height: 4),
-                  const Text("Opening : 11:00 AM to 11:00 PM", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
-                  const SizedBox(height: 4),
-                  const Text(
-                    "Address : 2/25 Poddarnagar Kolkata ,\n West bengal - 700046",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
-                  ),
-                  const SizedBox(height: 4),
-                  const Text("GST NO : 19YWFAS0292L8Z8", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
-
-                  const SizedBox(height: 15),
-                  _buildDottedDivider(),
-
-                  // Invoice Info
-                  Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Column(
-                      children: [
-                        _buildInfoRow("Invoice No : ${invoiceNo ?? 'TS252612531'}", "Billed By : Mousin"),
-                        const SizedBox(height: 4),
-                        _buildInfoRow("Date : ${date?.split(' ').first ?? '24-10-2025'}", "Time : ${date?.contains(' ') == true ? date!.split(' ').last : '11 : 25 AM'}"),
-                      ],
-                    ),
-                  ),
-
-                  _buildDottedDivider(),
-
-                  // Customer Info
-                  Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: _buildInfoRow("Name : ${customerName ?? 'Rohan'}", "Number : ${customerPhone ?? '62903 97293'}"),
-                  ),
-
-                  _buildDottedDivider(),
-
-                  // Table Header
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    child: Row(
-                      children: [
-                        Expanded(flex: 4, child: Text("Description", style: TextStyle(fontWeight: FontWeight.bold))),
-                        Expanded(flex: 1, child: Text("QTY", textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold))),
-                        Expanded(flex: 2, child: Text("Price", textAlign: TextAlign.right, style: TextStyle(fontWeight: FontWeight.bold))),
-                        Expanded(flex: 2, child: Text("Amount", textAlign: TextAlign.right, style: TextStyle(fontWeight: FontWeight.bold))),
-                      ],
-                    ),
-                  ),
-
-                  _buildDottedDivider(),
-
-                  // Items List (Static Data based on your image)
-                  _buildItemRow("Chicken Biryani", "2", "247.62", "495.24"),
-                  _buildDottedDivider(),
-                  _buildItemRow("Spl. Chicken Biryani", "1", "333.33", "333.33"),
-                  _buildDottedDivider(),
-                  _buildItemRow("Butter Chicken", "1", "261.90", "261.90"),
-                  _buildDottedDivider(),
-                  _buildItemRow("Butter Naan", "4", "47.62", "190.48"),
-                  _buildDottedDivider(),
-                  _buildItemRow("Mineral Water *", "2", "30.00", "60.00"),
-
-                  _buildDottedDivider(),
-
-                  // Sub-total
-                  Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: _buildInfoRow("Total Quantity : 10", "Sub Total : 1340.95"),
-                  ),
-
-                  _buildDottedDivider(),
-
-                  // Taxes
-                  Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Column(
-                      children: [
-                        _buildTaxRow("1280.95 @ CGST - 2.5%", "32.02"),
-                        _buildTaxRow("1280.95 @ SGST - 2.5%", "32.02"),
-                        _buildTaxRow("Round Off", "0.01"),
-                      ],
-                    ),
-                  ),
-
-                  _buildDottedDivider(),
-
-                  // Final Total
-                  Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text("Payment : Cash", style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14)),
-                        Text("Total Amount : ${totalAmount ?? '1405.00'}", style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14)),
-                      ],
-                    ),
-                  ),
-
-
-                  _buildDottedDivider(),
-                  const Text("Thank You & Visit Again", style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.w500)),
-                  const SizedBox(height: 30),
-                ],
-              ),
+            Image.asset(AppImagesPng.billTrackLogo, height: 20, errorBuilder: (context, error, stackTrace) => const Icon(Icons.receipt_long, size: 20)),
+            const Text(
+              "Mousin's Kitchen Pvt. Ltd.",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 8),
+            const Text("Phone Number : +91 6290 397200", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
+            const SizedBox(height: 4),
+            const Text("Opening : 11:00 AM to 11:00 PM", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
+            const SizedBox(height: 4),
+            const Text(
+              "Address : 2/25 Poddarnagar Kolkata ,\n West bengal - 700046",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+            ),
+            const SizedBox(height: 4),
+            const Text("GST NO : 19YWFAS0292L8Z8", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
+
+            const SizedBox(height: 15),
+
+            _buildDashedDivider(),
+
+            // Bill Information Section
+            const Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("Date & Time : ${'2024-10-25 15:15'}", style: TextStyle(fontSize: 12)),
+                    Text("POS : 231", style: TextStyle(fontSize: 12)),
+                  ],
+                ),
+                SizedBox(height: 4),
+                Text("Bill : '703134231/2416600'", style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+                SizedBox(height: 4),
+                Text("Cashier : ayushmita guha", style: TextStyle(fontSize: 12)),
+              ],
+            ),
+
+            _buildDashedDivider(),
+
+            // Customer Details (Right Aligned)
+            const Column(
+
+              children: [
+                Align(child: _RightInfoRow(label: "Customer Name :", value:  "Niladri Roy")),
+                _RightInfoRow(label: "Customer ID :", value: "2230356410222"),
+                _RightInfoRow(label: "Email :", value: "niladriroy20065@gmail.com"),
+                _RightInfoRow(label: "Mobile no :", value: "8254878880"),
+              ],
+            ),
+
+            _buildDashedDivider(),
+
+            // Items Table Section
+            Column(
+              children: [
+                const Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("Description\nSAQ Code\nHSN Code", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11)),
+                    Text("QTY", textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11)),
+                    Text("Unit Amt\nTotal Amt", textAlign: TextAlign.right, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11)),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                _buildItemRow("Phone Iphone", "1237733", "48194000", "1", "12.00", "12.00"),
+                _buildItemRow("Joystick", "4721236", "62121010", "1", "599.00", "599.00"),
+                _buildItemRow("T-Shirt", "2333833", "62024090", "1", "799.00", "799.00"),
+              ],
+            ),
+
+            _buildDashedDivider(),
+
+            // Totals Section
+            Column(
+              children: [
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("Total QTY : 3", style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+                    Text("Grand Total : ₹ ${ '1410.00'}", style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                _buildAmountRow("Net Payable", "₹ '1410.00'", isBold: true),
+                _buildAmountRow("Change Amount", "₹ 0.00"),
+              ],
+            ),
+
+            _buildDashedDivider(),
+
+            // Payment Mode Section
+
+
+
+            // Tax Information Section
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text("Tax Information", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                const SizedBox(height: 5),
+                _buildAmountRow("Taxable Amount", "₹  1194.92", isBold: true),
+                _buildAmountRow("CGST (9.00%)", "₹ 107.54"),
+                _buildAmountRow("SGST (9.00%)", "₹ 107.54"),
+                const Divider(),
+                _buildAmountRow("Total Tax", "₹ 215.08", isBold: true),
+              ],
+            ),
+
+            _buildDashedDivider(),
+
+            // Footer Section
+            const Column(
+              children: [
+                Text("Decathlon Sports India Pvt Ltd", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                SizedBox(height: 5),
+                Text(
+                  "Address: Survey No.78/10 A20 Chikkajala Village, Bellary Road, Bangalore, Karnataka, 562157",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 10),
+                ),
+                Text("CIN No: U72200KA2004PTC033858", style: TextStyle(fontSize: 10)),
+                Text("Fax: 08033487111", style: TextStyle(fontSize: 10)),
+              ],
+            ),
+
+            const SizedBox(height: 20),
           ],
         ),
       ),
     );
   }
 
-
-  Widget _buildInfoRow(String left, String right) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(left, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
-        Text(right, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
-      ],
-    );
-  }
-
-  Widget _buildTaxRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 4),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(label, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
-          Text(value, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500)),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildItemRow(String desc, String qty, String price, String amount) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      child: Row(
-        children: [
-          Expanded(flex: 4, child: Text(desc, style: const TextStyle(fontSize: 13))),
-          Expanded(flex: 1, child: Text(qty, textAlign: TextAlign.center, style: const TextStyle(fontSize: 13,fontWeight: FontWeight.w400))),
-          Expanded(flex: 2, child: Text(price, textAlign: TextAlign.right, style: const TextStyle(fontSize: 13,fontWeight: FontWeight.w400))),
-          Expanded(flex: 2, child: Text(amount, textAlign: TextAlign.right, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700))),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDottedDivider() {
+  Widget _buildItemRow(String desc, String code, String hsn, String qty, String unit, String total) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(desc, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600)),
+                Text(code, style: const TextStyle(fontSize: 10, color: Colors.grey)),
+                Text(hsn, style: const TextStyle(fontSize: 10, color: Colors.grey)),
+              ],
+            ),
+          ),
+          Expanded(child: Text(qty, textAlign: TextAlign.center, style: const TextStyle(fontSize: 11))),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text("₹$unit", style: const TextStyle(fontSize: 11)),
+                Text("₹$total", style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAmountRow(String label, String value, {bool isBold = false}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style: TextStyle(fontSize: 12, fontWeight: isBold ? FontWeight.bold : FontWeight.normal)),
+          Text(value, style: TextStyle(fontSize: 12, fontWeight: isBold ? FontWeight.bold : FontWeight.normal)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDashedDivider() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12.0),
+      child: Row(
         children: List.generate(
-          80,
-              (index) => Expanded(
+          40,
+          (index) => Expanded(
             child: Container(
-              color: index % 2 == 0 ? Colors.transparent : Colors.grey.withOpacity(0.5),
+              margin: const EdgeInsets.symmetric(horizontal: 2),
               height: 1,
+              color: Colors.grey.shade300,
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _InfoRow extends StatelessWidget {
+  final String label;
+  final String value;
+  const _InfoRow({required this.label, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(label, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11)),
+          const SizedBox(width: 5),
+          Expanded(child: Text(value, style: const TextStyle(fontSize: 11))),
+        ],
+      ),
+    );
+  }
+}
+
+class _RightInfoRow extends StatelessWidget {
+  final String label;
+  final String value;
+  const _RightInfoRow({required this.label, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 1.0),
+      child: Row(
+       mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(label, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11)),
+          const SizedBox(width: 5),
+          Text(value, style: const TextStyle(fontSize: 11)),
+        ],
       ),
     );
   }

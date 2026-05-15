@@ -162,10 +162,7 @@ class _InvoiceListTileState extends State<InvoiceListTile> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => InvoiceViewScreen(
-                          invoiceNo: widget.invoiceNo,
-                          date: widget.date,
-                          customerPhone: widget.phone,
-                          totalAmount: widget.amount,
+
                         ),
                       ),
                     );
