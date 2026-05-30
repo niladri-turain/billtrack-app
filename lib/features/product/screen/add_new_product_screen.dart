@@ -1,7 +1,13 @@
-import 'package:billtrack/core/constant/app_pngs.dart';
-import 'package:billtrack/features/product/widget/add_product_wudget.dart';
+import 'dart:io';
+
+import 'package:billtrack/features/product/widget/product_category_widget.dart';
+import 'package:billtrack/features/product/widget/product_information_widget.dart';
+import 'package:billtrack/features/product/widget/price_product_varient_section.dart';
+import 'package:billtrack/features/product/widget/add_new_section_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../../widgets/custom_app_bar.dart';
+
 
 class AddNewProductScreen extends StatefulWidget {
   const AddNewProductScreen({super.key});
@@ -30,6 +36,7 @@ class VariantControllerGroup {
   String? selectedColor;
   String? selectedSize;
   String? selectedStatus = 'Active';
+  XFile? selectedImage;
 
   void dispose() {
     mrpController.dispose();
@@ -58,6 +65,16 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
 
   final List<VariantControllerGroup> _variantControllers = [VariantControllerGroup()];
   int _primarySectionIndex = 0;
+  final ImagePicker _picker = ImagePicker();
+
+  Future<void> _pickImage(int index) async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      setState(() {
+        _variantControllers[index].selectedImage = image;
+      });
+    }
+  }
 
   void _addVariant() {
     setState(() {
@@ -138,7 +155,7 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
       backgroundColor: const Color(0xFFF8FAFC),
       appBar: CustomAppBar(
         isInvoiceDetails: true,
-        title: 'Add Product',
+        title: 'Add New Product',
         onBackPress: () {
           Navigator.pop(context);
         },
@@ -168,16 +185,7 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
             ),
             const SizedBox(height: 20),
 
-            // Product Category Section
-            ProductCategorySection(
-              selectedCategory: _selectedCategory,
-              selectedSubCategory: _selectedSubCategory,
-              selectedSubSubCategory: _selectedSubSubCategory,
-              onCategoryChanged: (val) => setState(() => _selectedCategory = val),
-              onSubCategoryChanged: (val) => setState(() => _selectedSubCategory = val),
-              onSubSubCategoryChanged: (val) => setState(() => _selectedSubSubCategory = val),
-            ),
-            const SizedBox(height: 30),
+
 
             // Dynamic Pricing & Product Variants Sections
             ..._variantControllers.asMap().entries.map((entry) {
@@ -215,34 +223,13 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
                 metaDescriptionController: controllerGroup.metaDescriptionController,
                 shortDescriptionController: controllerGroup.shortDescriptionController,
                 fullDescriptionController: controllerGroup.fullDescriptionController,
+                selectedImage: controllerGroup.selectedImage != null ? File(controllerGroup.selectedImage!.path) : null,
+                onPickImage: () => _pickImage(index),
               );
             }),
 
             // Add Variant Button
-            InkWell(
-              onTap: _addVariant,
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                decoration: BoxDecoration(
-                  border: Border.all(color: const Color(0xFF4338CA)),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.add_circle_outline, color: Color(0xFF4338CA)),
-                    SizedBox(width: 8),
-                    Text(
-                      'Add New Variant Section',
-                      style: TextStyle(
-                        color: Color(0xFF4338CA),
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            AddNewSectionWidget(onTap: _addVariant),
             const SizedBox(height: 30),
 
             // Action Buttons

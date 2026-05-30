@@ -12,7 +12,8 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.8
   flutter_svg: ^2.0.10+1
-  image_picker: ^1.2.2
+  image_picker: ^1.1.2
+
   
 
 

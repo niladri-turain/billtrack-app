@@ -22,9 +22,9 @@ subprojects {
 // Apply SDK version override to all subprojects
 def setupFlutterVersions(Project project) {
     project.ext.flutter = [
-            compileSdkVersion: 35,
+            compileSdkVersion: 34,
             minSdkVersion: 21,
-            targetSdkVersion: 35,
+            targetSdkVersion: 34,
     ]
 }
 
