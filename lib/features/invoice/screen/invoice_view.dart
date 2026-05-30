@@ -25,7 +25,7 @@ class InvoiceViewScreen extends StatelessWidget {
 
             Image.asset(AppImagesPng.billTrackLogo, height: 20, errorBuilder: (context, error, stackTrace) => const Icon(Icons.receipt_long, size: 20)),
             const Text(
-              "Mousin's Kitchen Pvt. Ltd.",
+              "Turain Software Pvt. Ltd.",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
@@ -57,7 +57,7 @@ class InvoiceViewScreen extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: 4),
-                Text("Bill : '703134231/2416600'", style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+                Text("Bill : 703134231/2416600", style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
                 SizedBox(height: 4),
                 Text("Cashier : ayushmita guha", style: TextStyle(fontSize: 12)),
               ],
@@ -109,7 +109,7 @@ class InvoiceViewScreen extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 10),
-                _buildAmountRow("Net Payable", "₹ '1410.00'", isBold: true),
+                _buildAmountRow("Net Payable", "₹ 1410.00", isBold: true),
                 _buildAmountRow("Change Amount", "₹ 0.00"),
               ],
             ),
