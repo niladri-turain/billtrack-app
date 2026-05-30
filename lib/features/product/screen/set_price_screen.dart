@@ -1,5 +1,6 @@
 import 'package:billtrack/core/constant/app_colors.dart';
 import 'package:billtrack/core/constant/app_pngs.dart';
+import 'package:billtrack/features/product/screen/add_new_product_screen.dart';
 import 'package:billtrack/features/product/widget/add_product_modal.dart';
 import 'package:billtrack/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
@@ -79,7 +80,14 @@ class _SetPriceScreenState extends State<SetPriceScreen> {
             child: Padding(
               padding: const EdgeInsets.only(bottom: 50.0),
               child: InkWell(
-                onTap: _showAddProductModal,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AddNewProductScreen(),
+                    ),
+                  );
+                },
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   decoration: BoxDecoration(
