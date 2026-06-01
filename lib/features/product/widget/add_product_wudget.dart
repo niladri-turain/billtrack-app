@@ -1,3 +1,4 @@
+import 'package:billtrack/core/constant/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
@@ -199,7 +200,9 @@ class CustomDropdownField extends StatelessWidget {
             border: Border.all(color: const Color(0xFFE2E8F0)),
           ),
           child: DropdownButtonHideUnderline(
+
             child: DropdownButton<String>(
+              dropdownColor: AppColors.orangeLite,
               value: value,
               hint: Text(hintText, style: const TextStyle(color: Color(0xFF94A3B8), fontSize: 14)),
               isExpanded: true,

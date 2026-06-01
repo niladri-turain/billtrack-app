@@ -25,5 +25,6 @@ class AppColors {
   static const Color checkboxGreen = Color(0xFF27C840);
   static const Color selectedProductBg = Color(0xFF40599B);
   static const Color orangeTitle = Color(0xFFEA6B23);
+  static const Color orangeLite=Color(0xFFfcf0e9);
 }
 
