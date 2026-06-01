@@ -25,7 +25,7 @@ class BusinessCategoryProvider extends ChangeNotifier {
 
     try {
       final response = await apiService.get(
-        ApiEndPoints.businessCategory,
+        ApiEndPoints.productCategory,
         token: AppStrings.bearerToken,
       );
       final categoryResponse = BusinessCategoryResponse.fromJson(response);

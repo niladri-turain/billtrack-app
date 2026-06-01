@@ -202,7 +202,7 @@ class CustomDropdownField extends StatelessWidget {
           child: DropdownButtonHideUnderline(
 
             child: DropdownButton<String>(
-              dropdownColor: AppColors.orangeLite,
+              dropdownColor: AppColors.white,
               value: value,
               hint: Text(hintText, style: const TextStyle(color: Color(0xFF94A3B8), fontSize: 14)),
               isExpanded: true,
