@@ -3,6 +3,24 @@ allprojects {
         google()
         mavenCentral()
     }
+    // Set global properties that Flutter and its plugins (like jni) expect.
+    // Setting these here ensures they are available during the evaluation of any subproject plugin.
+    project.ext {
+        compileSdkVersion = 36
+        minSdkVersion = 24
+        targetSdkVersion = 34
+        ndkVersion = "25.1.8937393"
+        versionCode = 1
+        versionName = "1.0.0"
+        flutter = [
+            compileSdkVersion: 36,
+            minSdkVersion: 24,
+            targetSdkVersion: 34,
+            ndkVersion: "25.1.8937393",
+            versionCode: 1,
+            versionName: "1.0.0"
+        ]
+    }
 }
 
 rootProject.buildDir = '../build'
@@ -11,21 +29,28 @@ subprojects {
 }
 
 subprojects {
-    project.evaluationDependsOn(':app')
+    // Configure Android settings as soon as the respective plugin is applied.
+    // This is safer than afterEvaluate and avoids "already evaluated" errors.
+    def configureAndroid = { p ->
+        p.android {
+            compileSdkVersion 36
+            ndkVersion "25.1.8937393"
+            
+            if (p.android.hasProperty('defaultConfig')) {
+                p.android.defaultConfig.minSdkVersion = 24
+                p.android.defaultConfig.targetSdkVersion = 34
+                p.android.defaultConfig.versionCode = 1
+                p.android.defaultConfig.versionName = "1.0.0"
+            }
+        }
+    }
+
+    project.plugins.withId('com.android.application') { configureAndroid(project) }
+    project.plugins.withId('com.android.library') { configureAndroid(project) }
 }
 
-// Force all plugins to use API 34 to avoid the broken android-35 on your system
 subprojects {
-    setupFlutterVersions(project)
-}
-
-// Apply SDK version override to all subprojects
-def setupFlutterVersions(Project project) {
-    project.ext.flutter = [
-            compileSdkVersion: 34,
-            minSdkVersion: 21,
-            targetSdkVersion: 34,
-    ]
+    project.evaluationDependsOn(':app')
 }
 
 tasks.register("clean", Delete) {

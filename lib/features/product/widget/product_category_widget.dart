@@ -11,6 +11,7 @@ class ProductCategorySection extends StatelessWidget {
   final List<String> categories;
   final List<String> subCategories;
   final List<String> subSubCategories;
+  final bool isLoading;
 
   const ProductCategorySection({
     super.key,
@@ -20,9 +21,10 @@ class ProductCategorySection extends StatelessWidget {
     required this.onCategoryChanged,
     required this.onSubCategoryChanged,
     required this.onSubSubCategoryChanged,
-    this.categories = const ['Electronics', 'Grocery', 'Fashion', 'Others'],
+    this.categories = const [],
     this.subCategories = const [],
     this.subSubCategories = const [],
+    this.isLoading = false,
   });
 
   @override
@@ -43,9 +45,15 @@ class ProductCategorySection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // if (isLoading)
+          //   const LinearProgressIndicator(
+          //     backgroundColor: Color(0xFFF1F5F9),
+          //     color: Color(0xFF4338CA),
+          //   ),
+          if (isLoading) const SizedBox(height: 10),
           CustomDropdownField(
             label: 'Product Category',
-            hintText: 'Select Type...',
+            hintText: isLoading ? 'Loading...' : 'Select Type...',
             isMandatory: true,
             items: categories,
             value: selectedCategory,

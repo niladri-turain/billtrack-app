@@ -4,9 +4,12 @@ import 'package:billtrack/features/product/widget/product_category_widget.dart';
 import 'package:billtrack/features/product/widget/product_information_widget.dart';
 import 'package:billtrack/features/product/widget/price_product_varient_section.dart';
 import 'package:billtrack/features/product/widget/add_new_section_widget.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import '../../../widgets/custom_app_bar.dart';
+import '../provider/business_category_provider.dart';
 
 
 class AddNewProductScreen extends StatefulWidget {
@@ -66,6 +69,14 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
   final List<VariantControllerGroup> _variantControllers = [VariantControllerGroup()];
   int _primarySectionIndex = 0;
   final ImagePicker _picker = ImagePicker();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<BusinessCategoryProvider>().fetchBusinessCategories();
+    });
+  }
 
   Future<void> _pickImage(int index) async {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
@@ -143,7 +154,7 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
       }).toList(),
     };
 
-    print('Saving Product Data: $productData');
+    debugPrint('Saving Product Data: $productData');
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Product details saved successfully')),
     );
@@ -168,13 +179,19 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
 
             const SizedBox(height: 20),
             // Product Category Section
-            ProductCategorySection(
-              selectedCategory: _selectedCategory,
-              selectedSubCategory: _selectedSubCategory,
-              selectedSubSubCategory: _selectedSubSubCategory,
-              onCategoryChanged: (val) => setState(() => _selectedCategory = val),
-              onSubCategoryChanged: (val) => setState(() => _selectedSubCategory = val),
-              onSubSubCategoryChanged: (val) => setState(() => _selectedSubSubCategory = val),
+            Consumer<BusinessCategoryProvider>(
+              builder: (context, provider, child) {
+                return ProductCategorySection(
+                  isLoading: provider.isLoading,
+                  categories: provider.categories.map((e) => e.name).toList(),
+                  selectedCategory: _selectedCategory,
+                  selectedSubCategory: _selectedSubCategory,
+                  selectedSubSubCategory: _selectedSubSubCategory,
+                  onCategoryChanged: (val) => setState(() => _selectedCategory = val),
+                  onSubCategoryChanged: (val) => setState(() => _selectedSubCategory = val),
+                  onSubSubCategoryChanged: (val) => setState(() => _selectedSubSubCategory = val),
+                );
+              },
             ),
             const SizedBox(height: 20),
             // Basic Information Section
