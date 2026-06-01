@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'features/splashScreen/splash_screen.dart';
 import 'core/di/service_locator.dart';
 import 'features/product/provider/business_category_provider.dart';
+import 'features/product/provider/sub_category_provider.dart';
+import 'features/product/provider/sub_sub_category_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,6 +20,8 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => getIt<BusinessCategoryProvider>()),
+        ChangeNotifierProvider(create: (_) => getIt<SubCategoryProvider>()),
+        ChangeNotifierProvider(create: (_) => getIt<SubSubCategoryProvider>()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

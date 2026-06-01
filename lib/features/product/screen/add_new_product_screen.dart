@@ -10,6 +10,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import '../../../widgets/custom_app_bar.dart';
 import '../provider/business_category_provider.dart';
+import '../provider/sub_category_provider.dart';
+import '../provider/sub_sub_category_provider.dart';
 
 
 class AddNewProductScreen extends StatefulWidget {
@@ -179,16 +181,43 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
 
             const SizedBox(height: 20),
             // Product Category Section
-            Consumer<BusinessCategoryProvider>(
-              builder: (context, provider, child) {
+            Consumer3<BusinessCategoryProvider, SubCategoryProvider, SubSubCategoryProvider>(
+              builder: (context, businessProvider, subProvider, subSubProvider, child) {
                 return ProductCategorySection(
-                  isLoading: provider.isLoading,
-                  categories: provider.categories.map((e) => e.name).toList(),
+                  isLoading: businessProvider.isLoading || subProvider.isLoading || subSubProvider.isLoading,
+                  categories: businessProvider.categories.map((e) => e.name).toList(),
+                  subCategories: subProvider.subCategories.map((e) => e.value).toList(),
+                  subSubCategories: subSubProvider.subSubCategories.map((e) => e.name).toList(),
                   selectedCategory: _selectedCategory,
                   selectedSubCategory: _selectedSubCategory,
                   selectedSubSubCategory: _selectedSubSubCategory,
-                  onCategoryChanged: (val) => setState(() => _selectedCategory = val),
-                  onSubCategoryChanged: (val) => setState(() => _selectedSubCategory = val),
+                  onCategoryChanged: (val) {
+                    setState(() {
+                      _selectedCategory = val;
+                      _selectedSubCategory = null;
+                      _selectedSubSubCategory = null;
+                    });
+                    if (val != null) {
+                      final category = businessProvider.categories.firstWhere((e) => e.name == val);
+                      context.read<SubCategoryProvider>().fetchSubCategories(category.id);
+                    } else {
+                      context.read<SubCategoryProvider>().clearSubCategories();
+                      context.read<SubSubCategoryProvider>().clearSubSubCategories();
+                    }
+                  },
+                  onSubCategoryChanged: (val) {
+                    setState(() {
+                      _selectedSubCategory = val;
+                      _selectedSubSubCategory = null;
+                    });
+                    if (val != null && _selectedCategory != null) {
+                      final category = businessProvider.categories.firstWhere((e) => e.name == _selectedCategory);
+                      final subCategory = subProvider.subCategories.firstWhere((e) => e.value == val);
+                      context.read<SubSubCategoryProvider>().fetchSubSubCategories(category.id, subCategory.id);
+                    } else {
+                      context.read<SubSubCategoryProvider>().clearSubSubCategories();
+                    }
+                  },
                   onSubSubCategoryChanged: (val) => setState(() => _selectedSubSubCategory = val),
                 );
               },

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import '../../../service/api_service.dart';
-import '../model/sub_category_model.dart';
+import '../model/sub_sub_category_model.dart';
 import '../../../core/constant/api_end_points.dart';
 import '../../../core/constant/app_strings.dart';
 
-class SubCategoryProvider extends ChangeNotifier {
+class SubSubCategoryProvider extends ChangeNotifier {
   final ApiService apiService;
 
-  SubCategoryProvider({required this.apiService});
+  SubSubCategoryProvider({required this.apiService});
 
-  List<SubCategoryModel> _subCategories = [];
-  List<SubCategoryModel> get subCategories => _subCategories;
+  List<SubSubCategoryModel> _subSubCategories = [];
+  List<SubSubCategoryModel> get subSubCategories => _subSubCategories;
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
@@ -18,19 +18,19 @@ class SubCategoryProvider extends ChangeNotifier {
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
-  Future<void> fetchSubCategories(String categoryId) async {
+  Future<void> fetchSubSubCategories(String categoryId, String subCategoryId) async {
     _isLoading = true;
     _errorMessage = null;
-    _subCategories = [];
+    _subSubCategories = [];
     notifyListeners();
 
     try {
       final response = await apiService.get(
-        "${ApiEndPoints.productSubCategory}/$categoryId",
+        "${ApiEndPoints.productSubSubCategory}/$categoryId/$subCategoryId",
         token: AppStrings.bearerToken,
       );
-      final subCategoryResponse = SubCategoryResponse.fromJson(response);
-      _subCategories = subCategoryResponse.data;
+      final subSubCategoryResponse = SubSubCategoryResponse.fromJson(response);
+      _subSubCategories = subSubCategoryResponse.data;
     } catch (e) {
       _errorMessage = e.toString();
     } finally {
@@ -39,8 +39,8 @@ class SubCategoryProvider extends ChangeNotifier {
     }
   }
 
-  void clearSubCategories() {
-    _subCategories = [];
+  void clearSubSubCategories() {
+    _subSubCategories = [];
     notifyListeners();
   }
 }
