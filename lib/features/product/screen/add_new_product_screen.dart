@@ -184,7 +184,9 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
             Consumer3<BusinessCategoryProvider, SubCategoryProvider, SubSubCategoryProvider>(
               builder: (context, businessProvider, subProvider, subSubProvider, child) {
                 return ProductCategorySection(
-                  isLoading: businessProvider.isLoading || subProvider.isLoading || subSubProvider.isLoading,
+                  isCategoryLoading: businessProvider.isLoading,
+                  isSubCategoryLoading: subProvider.isLoading,
+                  isSubSubCategoryLoading: subSubProvider.isLoading,
                   categories: businessProvider.categories.map((e) => e.name).toList(),
                   subCategories: subProvider.subCategories.map((e) => e.value).toList(),
                   subSubCategories: subSubProvider.subSubCategories.map((e) => e.name).toList(),

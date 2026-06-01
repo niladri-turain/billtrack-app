@@ -157,6 +157,7 @@ class CustomDropdownField extends StatelessWidget {
   final List<String> items;
   final String? value;
   final ValueChanged<String?>? onChanged;
+  final bool isLoading;
 
   const CustomDropdownField({
     super.key,
@@ -166,6 +167,7 @@ class CustomDropdownField extends StatelessWidget {
     this.isMandatory = false,
     this.value,
     this.onChanged,
+    this.isLoading = false,
   });
 
   @override
@@ -204,7 +206,7 @@ class CustomDropdownField extends StatelessWidget {
             child: DropdownButton<String>(
               dropdownColor: AppColors.white,
               value: value,
-              hint: Text(hintText, style: const TextStyle(color: Color(0xFF94A3B8), fontSize: 14)),
+              hint: Text(hintText, style: TextStyle(color: (isLoading || items.isEmpty) ? const Color(0xFF94A3B8) : Colors.black, fontSize: 14)),
               isExpanded: true,
               icon: const Icon(Icons.keyboard_arrow_down, color: Color(0xFF94A3B8)),
               items: items.map((String item) {

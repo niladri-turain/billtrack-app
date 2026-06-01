@@ -11,7 +11,9 @@ class ProductCategorySection extends StatelessWidget {
   final List<String> categories;
   final List<String> subCategories;
   final List<String> subSubCategories;
-  final bool isLoading;
+  final bool isCategoryLoading;
+  final bool isSubCategoryLoading;
+  final bool isSubSubCategoryLoading;
 
   const ProductCategorySection({
     super.key,
@@ -24,7 +26,9 @@ class ProductCategorySection extends StatelessWidget {
     this.categories = const [],
     this.subCategories = const [],
     this.subSubCategories = const [],
-    this.isLoading = false,
+    this.isCategoryLoading = false,
+    this.isSubCategoryLoading = false,
+    this.isSubSubCategoryLoading = false,
   });
 
   @override
@@ -45,35 +49,36 @@ class ProductCategorySection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // if (isLoading)
-          //   const LinearProgressIndicator(
-          //     backgroundColor: Color(0xFFF1F5F9),
-          //     color: Color(0xFF4338CA),
-          //   ),
-          if (isLoading) const SizedBox(height: 10),
           CustomDropdownField(
             label: 'Product Category',
-            hintText: isLoading ? 'Loading...' : 'Select Type...',
+            hintText: isCategoryLoading ? 'Loading...' : 'Select Category',
             isMandatory: true,
             items: categories,
             value: selectedCategory,
             onChanged: onCategoryChanged,
+            isLoading: isCategoryLoading,
           ),
           const SizedBox(height: 20),
           CustomDropdownField(
             label: 'Product Sub Category',
-            hintText: 'Select Type first',
+            hintText: isSubCategoryLoading 
+                ? 'Loading...' 
+                : (selectedCategory == null ? 'Select Category first' : 'Select Sub Category'),
             items: subCategories,
             value: selectedSubCategory,
             onChanged: onSubCategoryChanged,
+            isLoading: isSubCategoryLoading || selectedCategory == null,
           ),
           const SizedBox(height: 20),
           CustomDropdownField(
             label: 'Product Sub Sub Category',
-            hintText: 'Select Product Category first',
+            hintText: isSubSubCategoryLoading 
+                ? 'Loading...' 
+                : (selectedSubCategory == null ? 'Select Sub Category first' : 'Select Sub Sub Category'),
             items: subSubCategories,
             value: selectedSubSubCategory,
             onChanged: onSubSubCategoryChanged,
+            isLoading: isSubSubCategoryLoading || selectedSubCategory == null,
           ),
         ],
       ),
