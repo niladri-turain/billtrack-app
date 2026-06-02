@@ -12,6 +12,8 @@ class PricingVariantSection extends StatelessWidget {
   final TextEditingController mrpController;
   final TextEditingController costController;
   final TextEditingController sellingController;
+  final TextEditingController skuController;
+  final TextEditingController barCodeController;
   final TextEditingController discountController;
   final TextEditingController stockController;
   final TextEditingController manufactureDateController;
@@ -44,6 +46,8 @@ class PricingVariantSection extends StatelessWidget {
     required this.mrpController,
     required this.costController,
     required this.sellingController,
+    required this.skuController,
+    required this.barCodeController,
     required this.discountController,
     required this.stockController,
     required this.manufactureDateController,
@@ -86,45 +90,50 @@ class PricingVariantSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Pricing & Product Variants - Section $index',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF4338CA),
-                    ),
-                  ),
-                  if (isPrimary)
-                    Container(
-                      margin: const EdgeInsets.only(top: 4),
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFE0E7FF),
-                        borderRadius: BorderRadius.circular(4),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Pricing & Product Variants - Section $index',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF4338CA),
                       ),
-                      child: const Text(
-                        'PRIMARY',
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF4338CA),
+                    ),
+                    if (isPrimary)
+                      Container(
+                        margin: const EdgeInsets.only(top: 4),
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFE0E7FF),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: const Text(
+                          'PRIMARY',
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF4338CA),
+                          ),
                         ),
                       ),
-                    ),
-                ],
+                  ],
+                ),
               ),
               if (showDelete)
-                IconButton(
-                  onPressed: onDelete,
-                  icon: const Icon(Icons.delete_outline, color: Colors.red),
-                  style: IconButton.styleFrom(
-                    backgroundColor: const Color(0xFFFEF2F2),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: IconButton(
+                    onPressed: onDelete,
+                    icon: const Icon(Icons.delete_outline, color: Colors.red),
+                    style: IconButton.styleFrom(
+                      backgroundColor: const Color(0xFFFEF2F2),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    ),
                   ),
                 ),
             ],
@@ -278,7 +287,35 @@ class PricingVariantSection extends StatelessWidget {
               keyboardType: TextInputType.number,
             ),
           ),
-          const SizedBox(height: 25),
+          const SizedBox(height: 15),
+          Row(
+            children: [
+              Expanded(
+                child: CustomTextField(
+                  label: 'SKU',
+                  hintText: '0.00',
+                  controller: skuController,
+                  isMandatory: true,
+                  prefix: const Padding(
+                    padding: EdgeInsets.all(12.0),
+                    child: Text('₹', style: TextStyle(color: Color(0xFF64748B), fontWeight: FontWeight.bold)),
+                  ),
+                  keyboardType: TextInputType.number,
+                ),
+              ),
+              const SizedBox(width: 15),
+              Expanded(
+                child: CustomTextField(
+                  label: 'Bar Code',
+                  hintText: '0',
+                  controller: barCodeController,
+                  isMandatory: false,
+                  keyboardType: TextInputType.number,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 15),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
@@ -307,7 +344,7 @@ class PricingVariantSection extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 15),
           const Text(
             'Product Variants',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
@@ -315,36 +352,30 @@ class PricingVariantSection extends StatelessWidget {
           const SizedBox(height: 10),
           const Divider(color: Color(0xFFF1F5F9)),
           const SizedBox(height: 15),
-          Row(
+          Column(
             children: [
-              Expanded(
-                child: CustomDropdownField(
-                  label: 'Material',
-                  hintText: 'Select',
-                  value: selectedMaterial,
-                  items: const ['Cotton', 'Silk', 'Polyester'],
-                  onChanged: onMaterialChanged,
-                ),
+              CustomDropdownField(
+                label: 'Material',
+                hintText: 'Select Material' ,
+                value: selectedMaterial,
+                items: const ['Cotton', 'Silk', 'Polyester'],
+                onChanged: onMaterialChanged,
               ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: CustomDropdownField(
-                  label: 'Color',
-                  hintText: 'Select',
-                  value: selectedColor,
-                  items: const ['Red', 'Blue', 'Green'],
-                  onChanged: onColorChanged,
-                ),
+              const SizedBox(height: 20),
+              CustomDropdownField(
+                label: 'Color',
+                hintText: 'Select Color',
+                value: selectedColor,
+                items: const ['Red', 'Blue', 'Green'],
+                onChanged: onColorChanged,
               ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: CustomDropdownField(
-                  label: 'Shirt Size',
-                  hintText: 'Select',
-                  value: selectedSize,
-                  items: const ['S', 'M', 'L', 'XL'],
-                  onChanged: onSizeChanged,
-                ),
+              const SizedBox(height: 20),
+              CustomDropdownField(
+                label: 'Shirt Size',
+                hintText: 'Select Size',
+                value: selectedSize,
+                items: const ['S', 'M', 'L', 'XL'],
+                onChanged: onSizeChanged,
               ),
             ],
           ),

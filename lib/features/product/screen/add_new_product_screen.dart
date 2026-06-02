@@ -9,9 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import '../../../widgets/custom_app_bar.dart';
-import '../provider/business_category_provider.dart';
-import '../provider/sub_category_provider.dart';
-import '../provider/sub_sub_category_provider.dart';
+import 'package:billtrack/features/product/provider/business_category_provider.dart';
+import 'package:billtrack/features/product/provider/sub_category_provider.dart';
+import 'package:billtrack/features/product/provider/sub_sub_category_provider.dart';
+import 'package:billtrack/features/product/provider/hsn_provider.dart';
 
 
 class AddNewProductScreen extends StatefulWidget {
@@ -26,6 +27,9 @@ class VariantControllerGroup {
   final TextEditingController costController = TextEditingController();
   final TextEditingController sellingController = TextEditingController();
   final TextEditingController discountController = TextEditingController();
+  final TextEditingController skuController = TextEditingController();
+  final TextEditingController barCodeController = TextEditingController();
+
   final TextEditingController stockController = TextEditingController();
   final TextEditingController manufactureDateController = TextEditingController();
   final TextEditingController expiryDateController = TextEditingController();
@@ -77,6 +81,7 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<BusinessCategoryProvider>().fetchBusinessCategories();
+      context.read<HSNProvider>().fetchHSNCodes();
     });
   }
 
@@ -254,6 +259,8 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
                 mrpController: controllerGroup.mrpController,
                 costController: controllerGroup.costController,
                 sellingController: controllerGroup.sellingController,
+                skuController: controllerGroup.skuController,
+                barCodeController: controllerGroup.barCodeController,
                 discountController: controllerGroup.discountController,
                 stockController: controllerGroup.stockController,
                 manufactureDateController: controllerGroup.manufactureDateController,

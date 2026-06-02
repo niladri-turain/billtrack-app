@@ -1,5 +1,8 @@
+import 'package:billtrack/features/product/provider/hsn_provider.dart';
+import 'package:billtrack/features/product/widget/hsn_searchable_dropdown.dart';
 import 'package:flutter/material.dart';
-import 'add_product_wudget.dart';
+import 'package:provider/provider.dart';
+import 'package:billtrack/features/product/widget/add_product_wudget.dart';
 
 class BasicInformationSection extends StatelessWidget {
   final TextEditingController titleController;
@@ -52,11 +55,26 @@ class BasicInformationSection extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: CustomTextField(
-                  label: 'HSN Code',
-                  hintText: 'Search HSN Code...',
-                  isMandatory: true,
-                  controller: hsnController,
+                child: Consumer<HSNProvider>(
+                  builder: (context, hsnProvider, child) {
+                    return ValueListenableBuilder<TextEditingValue>(
+                      valueListenable: hsnController,
+                      builder: (context, value, child) {
+                        return HSNSearchableDropdown(
+                          label: 'HSN Code',
+                          hintText: 'Select HSN Code',
+                          isMandatory: true,
+                          items: hsnProvider.hsnList,
+                          selectedValue: value.text.isNotEmpty ? value.text : null,
+                          isLoading: hsnProvider.isLoading,
+                          onSelected: (selectedHsn) {
+                            hsnController.text = selectedHsn.hsnCode.isEmpty ? 'No Code' : selectedHsn.hsnCode;
+                            gstController.text = selectedHsn.gst;
+                          },
+                        );
+                      },
+                    );
+                  },
                 ),
               ),
               const SizedBox(width: 16),
@@ -67,6 +85,7 @@ class BasicInformationSection extends StatelessWidget {
                   isMandatory: true,
                   keyboardType: TextInputType.number,
                   controller: gstController,
+                  readOnly: true,
                 ),
               ),
             ],
