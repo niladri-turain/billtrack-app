@@ -4,8 +4,10 @@ import 'package:billtrack/features/product/widget/product_category_widget.dart';
 import 'package:billtrack/features/product/widget/product_information_widget.dart';
 import 'package:billtrack/features/product/widget/price_product_varient_section.dart';
 import 'package:billtrack/features/product/widget/add_new_section_widget.dart';
+import 'package:billtrack/widgets/image_picker_bottom_sheet.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import '../../../widgets/custom_app_bar.dart';
@@ -86,11 +88,61 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
   }
 
   Future<void> _pickImage(int index) async {
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    if (image != null) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) => ImagePickerBottomSheet(
+        onCameraTap: () => _getImage(index, ImageSource.camera),
+        onGalleryTap: () => _getImage(index, ImageSource.gallery),
+      ),
+    );
+  }
+
+  Future<void> _getImage(int index, ImageSource source) async {
+    try {
+      final XFile? image = await _picker.pickImage(
+        source: source,
+        imageQuality: 80,
+        maxWidth: 1080,
+        maxHeight: 1080,
+      );
+
+      if (image == null) return;
+
+      // Small delay ensures the camera UI has fully dismissed and the file is ready
+      await Future.delayed(const Duration(milliseconds: 600));
+
+      final CroppedFile? croppedFile = await ImageCropper().cropImage(
+        sourcePath: image.path,
+        aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
+        uiSettings: [
+          AndroidUiSettings(
+            toolbarTitle: 'Crop Image',
+            toolbarColor: const Color(0xFF4338CA),
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.square,
+            lockAspectRatio: true,
+          ),
+          IOSUiSettings(
+            title: 'Crop Image',
+            aspectRatioLockEnabled: true,
+            resetAspectRatioEnabled: false,
+          ),
+        ],
+      );
+
+      if (!mounted) return;
+
       setState(() {
-        _variantControllers[index].selectedImage = image;
+        if (croppedFile != null) {
+          _variantControllers[index].selectedImage = XFile(croppedFile.path);
+        } else {
+          // If crop is cancelled/skipped, use the original picked image
+          _variantControllers[index].selectedImage = image;
+        }
       });
+    } catch (e) {
+      debugPrint("Error picking/cropping image: $e");
     }
   }
 
