@@ -1,7 +1,8 @@
-import 'package:billtrack/core/constant/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 class CustomTextField extends StatelessWidget {
+  final String name;
   final String label;
   final String hintText;
   final bool isMandatory;
@@ -10,9 +11,12 @@ class CustomTextField extends StatelessWidget {
   final int maxLines;
   final Widget? prefix;
   final bool readOnly;
+  final String? Function(String?)? validator;
+  final ValueChanged<String?>? onChanged;
 
   const CustomTextField({
     super.key,
+    required this.name,
     required this.label,
     required this.hintText,
     this.isMandatory = false,
@@ -21,6 +25,8 @@ class CustomTextField extends StatelessWidget {
     this.maxLines = 1,
     this.prefix,
     this.readOnly = false,
+    this.validator,
+    this.onChanged,
   });
 
   @override
@@ -47,11 +53,15 @@ class CustomTextField extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8),
-        TextField(
+        FormBuilderTextField(
+          name: name,
           controller: controller,
           keyboardType: keyboardType,
           maxLines: maxLines,
           readOnly: readOnly,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          validator: validator,
+          onChanged: onChanged,
           decoration: InputDecoration(
             hintText: hintText,
             prefixIcon: prefix,
@@ -59,13 +69,23 @@ class CustomTextField extends StatelessWidget {
             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             filled: true,
             fillColor: Colors.white,
+            errorStyle: const TextStyle(color: Colors.red, fontSize: 12),
+            errorMaxLines: 3,
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Color(0xFFE2E8F0), width: 1.5),
+              borderSide: const BorderSide(color: Color(0xFF4338CA), width: 1.5),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: Colors.red),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: Colors.red, width: 1.5),
             ),
           ),
         ),
@@ -75,30 +95,22 @@ class CustomTextField extends StatelessWidget {
 }
 
 class CustomDateField extends StatelessWidget {
+  final String name;
   final String label;
   final String hintText;
   final bool isMandatory;
   final TextEditingController? controller;
+  final String? Function(DateTime?)? validator;
 
   const CustomDateField({
     super.key,
+    required this.name,
     required this.label,
     required this.hintText,
     this.isMandatory = false,
     this.controller,
+    this.validator,
   });
-
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-    );
-    if (picked != null) {
-      controller?.text = "${picked.day}/${picked.month}/${picked.year}";
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -124,27 +136,28 @@ class CustomDateField extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8),
-        InkWell(
-          onTap: () => _selectDate(context),
-          child: IgnorePointer(
-            child: TextField(
-              controller: controller,
-              decoration: InputDecoration(
-                hintText: hintText,
-                suffixIcon: const Icon(Icons.calendar_today_outlined, size: 20, color: Color(0xFF64748B)),
-                hintStyle: const TextStyle(color: Color(0xFF94A3B8), fontSize: 14),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                filled: true,
-                fillColor: Colors.white,
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(color: Color(0xFFE2E8F0), width: 1.5),
-                ),
-              ),
+        FormBuilderDateTimePicker(
+          name: name,
+          inputType: InputType.date,
+          controller: controller,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          validator: validator,
+          decoration: InputDecoration(
+            hintText: hintText,
+            suffixIcon: const Icon(Icons.calendar_today_outlined, size: 20, color: Color(0xFF64748B)),
+            hintStyle: const TextStyle(color: Color(0xFF94A3B8), fontSize: 14),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            filled: true,
+            fillColor: Colors.white,
+            errorStyle: const TextStyle(color: Colors.red, fontSize: 12),
+            errorMaxLines: 3,
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: Color(0xFF4338CA), width: 1.5),
             ),
           ),
         ),
@@ -154,6 +167,7 @@ class CustomDateField extends StatelessWidget {
 }
 
 class CustomDropdownField extends StatelessWidget {
+  final String name;
   final String label;
   final String hintText;
   final bool isMandatory;
@@ -161,9 +175,11 @@ class CustomDropdownField extends StatelessWidget {
   final String? value;
   final ValueChanged<String?>? onChanged;
   final bool isLoading;
+  final String? Function(String?)? validator;
 
   const CustomDropdownField({
     super.key,
+    required this.name,
     required this.label,
     required this.hintText,
     required this.items,
@@ -171,6 +187,7 @@ class CustomDropdownField extends StatelessWidget {
     this.value,
     this.onChanged,
     this.isLoading = false,
+    this.validator,
   });
 
   @override
@@ -197,30 +214,43 @@ class CustomDropdownField extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: const Color(0xFFE2E8F0)),
-          ),
-          child: DropdownButtonHideUnderline(
-
-            child: DropdownButton<String>(
-              dropdownColor: AppColors.white,
-              value: value,
-              hint: Text(hintText, style: TextStyle(color: (isLoading || items.isEmpty) ? const Color(0xFF94A3B8) : Colors.black, fontSize: 14)),
-              isExpanded: true,
-              icon: const Icon(Icons.keyboard_arrow_down, color: Color(0xFF94A3B8)),
-              items: items.map((String item) {
-                return DropdownMenuItem<String>(
-                  value: item,
-                  child: Text(item, style: const TextStyle(fontSize: 14, color: Color(0xFF334155))),
-                );
-              }).toList(),
-              onChanged: onChanged,
+        FormBuilderDropdown<String>(
+          name: name,
+          initialValue: value,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          validator: validator,
+          decoration: InputDecoration(
+            hintText: hintText,
+            hintStyle: TextStyle(color: (isLoading || items.isEmpty) ? const Color(0xFF94A3B8) : Colors.black, fontSize: 14),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            filled: true,
+            fillColor: Colors.white,
+            errorStyle: const TextStyle(color: Colors.red, fontSize: 12),
+            errorMaxLines: 3,
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: Color(0xFF4338CA), width: 1.5),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: Colors.red),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: Colors.red, width: 1.5),
             ),
           ),
+          items: items.map((String item) {
+            return DropdownMenuItem<String>(
+              value: item,
+              child: Text(item, style: const TextStyle(fontSize: 14, color: Color(0xFF334155))),
+            );
+          }).toList(),
+          onChanged: onChanged,
         ),
       ],
     );

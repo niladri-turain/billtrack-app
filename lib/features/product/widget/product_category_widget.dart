@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'add_product_wudget.dart';
 
 class ProductCategorySection extends StatelessWidget {
@@ -50,6 +51,7 @@ class ProductCategorySection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CustomDropdownField(
+            name: 'category',
             label: 'Product Category',
             hintText: isCategoryLoading ? 'Loading...' : 'Select Category',
             isMandatory: true,
@@ -57,9 +59,11 @@ class ProductCategorySection extends StatelessWidget {
             value: selectedCategory,
             onChanged: onCategoryChanged,
             isLoading: isCategoryLoading,
+            validator: FormBuilderValidators.required(errorText: 'Category is required'),
           ),
           const SizedBox(height: 20),
           CustomDropdownField(
+            name: 'sub_category',
             label: 'Product Sub Category',
             hintText: isSubCategoryLoading 
                 ? 'Loading...' 
@@ -71,6 +75,7 @@ class ProductCategorySection extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           CustomDropdownField(
+            name: 'sub_sub_category',
             label: 'Product Sub Sub Category',
             hintText: isSubSubCategoryLoading 
                 ? 'Loading...' 

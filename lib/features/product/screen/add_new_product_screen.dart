@@ -5,8 +5,8 @@ import 'package:billtrack/features/product/widget/product_information_widget.dar
 import 'package:billtrack/features/product/widget/price_product_varient_section.dart';
 import 'package:billtrack/features/product/widget/add_new_section_widget.dart';
 import 'package:billtrack/widgets/image_picker_bottom_sheet.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -15,7 +15,6 @@ import 'package:billtrack/features/product/provider/business_category_provider.d
 import 'package:billtrack/features/product/provider/sub_category_provider.dart';
 import 'package:billtrack/features/product/provider/sub_sub_category_provider.dart';
 import 'package:billtrack/features/product/provider/hsn_provider.dart';
-
 
 class AddNewProductScreen extends StatefulWidget {
   const AddNewProductScreen({super.key});
@@ -31,12 +30,9 @@ class VariantControllerGroup {
   final TextEditingController discountController = TextEditingController();
   final TextEditingController skuController = TextEditingController();
   final TextEditingController barCodeController = TextEditingController();
-
   final TextEditingController stockController = TextEditingController();
   final TextEditingController manufactureDateController = TextEditingController();
   final TextEditingController expiryDateController = TextEditingController();
-
-  // SEO & Description Controllers
   final TextEditingController metaTitleController = TextEditingController();
   final TextEditingController metaKeywordsController = TextEditingController();
   final TextEditingController metaDescriptionController = TextEditingController();
@@ -48,6 +44,7 @@ class VariantControllerGroup {
   String? selectedSize;
   String? selectedStatus = 'Active';
   XFile? selectedImage;
+  String? imageError;
 
   void dispose() {
     mrpController.dispose();
@@ -66,6 +63,7 @@ class VariantControllerGroup {
 }
 
 class _AddNewProductScreenState extends State<AddNewProductScreen> {
+  final _formKey = GlobalKey<FormBuilderState>();
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _hsnController = TextEditingController();
   final TextEditingController _gstController = TextEditingController();
@@ -108,8 +106,6 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
       );
 
       if (image == null) return;
-
-      // Small delay ensures the camera UI has fully dismissed and the file is ready
       await Future.delayed(const Duration(milliseconds: 600));
 
       final CroppedFile? croppedFile = await ImageCropper().cropImage(
@@ -126,7 +122,6 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
           IOSUiSettings(
             title: 'Crop Image',
             aspectRatioLockEnabled: true,
-            resetAspectRatioEnabled: false,
           ),
         ],
       );
@@ -134,15 +129,15 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
       if (!mounted) return;
 
       setState(() {
+        _variantControllers[index].imageError = null;
         if (croppedFile != null) {
           _variantControllers[index].selectedImage = XFile(croppedFile.path);
         } else {
-          // If crop is cancelled/skipped, use the original picked image
           _variantControllers[index].selectedImage = image;
         }
       });
     } catch (e) {
-      debugPrint("Error picking/cropping image: $e");
+      debugPrint("Error picking image: $e");
     }
   }
 
@@ -161,10 +156,6 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
           _primarySectionIndex = 0;
         }
       });
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('At least one variant is required')),
-      );
     }
   }
 
@@ -173,50 +164,39 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
     _titleController.dispose();
     _hsnController.dispose();
     _gstController.dispose();
-    for (var controller in _variantControllers) {
-      controller.dispose();
+    for (var v in _variantControllers) {
+      v.dispose();
     }
     super.dispose();
   }
 
   void _saveProduct() {
-    // Collect and log data for verification
-    final productData = {
-      'title': _titleController.text,
-      'hsn': _hsnController.text,
-      'gst': _gstController.text,
-      'category': _selectedCategory,
-      'subCategory': _selectedSubCategory,
-      'subSubCategory': _selectedSubSubCategory,
-      'variants': _variantControllers.asMap().entries.map((entry) {
-        final idx = entry.key;
-        final v = entry.value;
-        return {
-          'isPrimary': _primarySectionIndex == idx,
-          'mrp': v.mrpController.text,
-          'cost': v.costController.text,
-          'selling': v.sellingController.text,
-          'discount': v.discountController.text,
-          'stock': v.stockController.text,
-          'material': v.selectedMaterial,
-          'color': v.selectedColor,
-          'size': v.selectedSize,
-          'status': v.selectedStatus,
-          'seo': {
-            'metaTitle': v.metaTitleController.text,
-            'metaKeywords': v.metaKeywordsController.text,
-            'metaDescription': v.metaDescriptionController.text,
-            'shortDescription': v.shortDescriptionController.text,
-            'fullDescription': v.fullDescriptionController.text,
-          }
-        };
-      }).toList(),
-    };
+    bool isImageValid = true;
+    setState(() {
+      for (var v in _variantControllers) {
+        if (v.selectedImage == null) {
+          v.imageError = 'Image is required';
+          isImageValid = false;
+        } else {
+          v.imageError = null;
+        }
+      }
+    });
 
-    debugPrint('Saving Product Data: $productData');
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Product details saved successfully')),
-    );
+    if ((_formKey.currentState?.saveAndValidate() ?? false) && isImageValid) {
+      final formData = _formKey.currentState?.value;
+      debugPrint('Saving Product Data: $formData');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Product details saved successfully')),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please fix the errors in the form'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   @override
@@ -226,141 +206,119 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
       appBar: CustomAppBar(
         isInvoiceDetails: true,
         title: 'Add New Product',
-        onBackPress: () {
-          Navigator.pop(context);
-        },
+        onBackPress: () => Navigator.pop(context),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          children: [
-            // Image Upload Section
-
-            const SizedBox(height: 20),
-            // Product Category Section
-            Consumer3<BusinessCategoryProvider, SubCategoryProvider, SubSubCategoryProvider>(
-              builder: (context, businessProvider, subProvider, subSubProvider, child) {
-                return ProductCategorySection(
-                  isCategoryLoading: businessProvider.isLoading,
-                  isSubCategoryLoading: subProvider.isLoading,
-                  isSubSubCategoryLoading: subSubProvider.isLoading,
-                  categories: businessProvider.categories.map((e) => e.name).toList(),
-                  subCategories: subProvider.subCategories.map((e) => e.value).toList(),
-                  subSubCategories: subSubProvider.subSubCategories.map((e) => e.name).toList(),
-                  selectedCategory: _selectedCategory,
-                  selectedSubCategory: _selectedSubCategory,
-                  selectedSubSubCategory: _selectedSubSubCategory,
-                  onCategoryChanged: (val) {
-                    setState(() {
-                      _selectedCategory = val;
-                      _selectedSubCategory = null;
-                      _selectedSubSubCategory = null;
-                    });
-                    if (val != null) {
-                      final category = businessProvider.categories.firstWhere((e) => e.name == val);
-                      context.read<SubCategoryProvider>().fetchSubCategories(category.id);
-                    } else {
-                      context.read<SubCategoryProvider>().clearSubCategories();
-                      context.read<SubSubCategoryProvider>().clearSubSubCategories();
-                    }
-                  },
-                  onSubCategoryChanged: (val) {
-                    setState(() {
-                      _selectedSubCategory = val;
-                      _selectedSubSubCategory = null;
-                    });
-                    if (val != null && _selectedCategory != null) {
-                      final category = businessProvider.categories.firstWhere((e) => e.name == _selectedCategory);
-                      final subCategory = subProvider.subCategories.firstWhere((e) => e.value == val);
-                      context.read<SubSubCategoryProvider>().fetchSubSubCategories(category.id, subCategory.id);
-                    } else {
-                      context.read<SubSubCategoryProvider>().clearSubSubCategories();
-                    }
-                  },
-                  onSubSubCategoryChanged: (val) => setState(() => _selectedSubSubCategory = val),
-                );
-              },
-            ),
-            const SizedBox(height: 20),
-            // Basic Information Section
-            BasicInformationSection(
-              titleController: _titleController,
-              hsnController: _hsnController,
-              gstController: _gstController,
-            ),
-            const SizedBox(height: 20),
-
-
-
-            // Dynamic Pricing & Product Variants Sections
-            ..._variantControllers.asMap().entries.map((entry) {
-              final index = entry.key;
-              final controllerGroup = entry.value;
-              return PricingVariantSection(
-                index: index + 1,
-                isPrimary: _primarySectionIndex == index,
-                showDelete: _variantControllers.length > 1,
-                onDelete: () => _deleteVariant(index),
-                onPrimaryChanged: (val) {
-                  if (val == true) {
-                    setState(() {
-                      _primarySectionIndex = index;
-                    });
-                  }
+      body: FormBuilder(
+        key: _formKey,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            children: [
+              const SizedBox(height: 20),
+              Consumer3<BusinessCategoryProvider, SubCategoryProvider, SubSubCategoryProvider>(
+                builder: (context, businessProvider, subProvider, subSubProvider, child) {
+                  return ProductCategorySection(
+                    isCategoryLoading: businessProvider.isLoading,
+                    isSubCategoryLoading: subProvider.isLoading,
+                    isSubSubCategoryLoading: subSubProvider.isLoading,
+                    categories: businessProvider.categories.map((e) => e.name).toList(),
+                    subCategories: subProvider.subCategories.map((e) => e.value).toList(),
+                    subSubCategories: subSubProvider.subSubCategories.map((e) => e.name).toList(),
+                    selectedCategory: _selectedCategory,
+                    selectedSubCategory: _selectedSubCategory,
+                    selectedSubSubCategory: _selectedSubSubCategory,
+                    onCategoryChanged: (val) {
+                      setState(() {
+                        _selectedCategory = val;
+                        _selectedSubCategory = null;
+                        _selectedSubSubCategory = null;
+                      });
+                      if (val != null) {
+                        final category = businessProvider.categories.firstWhere((e) => e.name == val);
+                        context.read<SubCategoryProvider>().fetchSubCategories(category.id);
+                      }
+                    },
+                    onSubCategoryChanged: (val) {
+                      setState(() {
+                        _selectedSubCategory = val;
+                        _selectedSubSubCategory = null;
+                      });
+                      if (val != null && _selectedCategory != null) {
+                        final category = businessProvider.categories.firstWhere((e) => e.name == _selectedCategory);
+                        final subCategory = subProvider.subCategories.firstWhere((e) => e.value == val);
+                        context.read<SubSubCategoryProvider>().fetchSubSubCategories(category.id, subCategory.id);
+                      }
+                    },
+                    onSubSubCategoryChanged: (val) => setState(() => _selectedSubSubCategory = val),
+                  );
                 },
-                mrpController: controllerGroup.mrpController,
-                costController: controllerGroup.costController,
-                sellingController: controllerGroup.sellingController,
-                skuController: controllerGroup.skuController,
-                barCodeController: controllerGroup.barCodeController,
-                discountController: controllerGroup.discountController,
-                stockController: controllerGroup.stockController,
-                manufactureDateController: controllerGroup.manufactureDateController,
-                expiryDateController: controllerGroup.expiryDateController,
-                selectedMaterial: controllerGroup.selectedMaterial,
-                selectedColor: controllerGroup.selectedColor,
-                selectedSize: controllerGroup.selectedSize,
-                selectedStatus: controllerGroup.selectedStatus,
-                onMaterialChanged: (val) => setState(() => controllerGroup.selectedMaterial = val),
-                onColorChanged: (val) => setState(() => controllerGroup.selectedColor = val),
-                onSizeChanged: (val) => setState(() => controllerGroup.selectedSize = val),
-                onStatusChanged: (val) => setState(() => controllerGroup.selectedStatus = val),
-                metaTitleController: controllerGroup.metaTitleController,
-                metaKeywordsController: controllerGroup.metaKeywordsController,
-                metaDescriptionController: controllerGroup.metaDescriptionController,
-                shortDescriptionController: controllerGroup.shortDescriptionController,
-                fullDescriptionController: controllerGroup.fullDescriptionController,
-                selectedImage: controllerGroup.selectedImage != null ? File(controllerGroup.selectedImage!.path) : null,
-                onPickImage: () => _pickImage(index),
-              );
-            }),
-
-            // Add Variant Button
-            AddNewSectionWidget(onTap: _addVariant),
-            const SizedBox(height: 30),
-
-            // Action Buttons
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: _saveProduct,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF27C840),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                      elevation: 0,
-                    ),
-                    child: const Text(
-                      'Save Product Details',
-                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+              ),
+              const SizedBox(height: 20),
+              BasicInformationSection(
+                titleController: _titleController,
+                hsnController: _hsnController,
+                gstController: _gstController,
+              ),
+              const SizedBox(height: 20),
+              ..._variantControllers.asMap().entries.map((entry) {
+                final index = entry.key;
+                final v = entry.value;
+                return PricingVariantSection(
+                  index: index + 1,
+                  isPrimary: _primarySectionIndex == index,
+                  showDelete: _variantControllers.length > 1,
+                  onDelete: () => _deleteVariant(index),
+                  onPrimaryChanged: (val) {
+                    if (val == true) setState(() => _primarySectionIndex = index);
+                  },
+                  mrpController: v.mrpController,
+                  costController: v.costController,
+                  sellingController: v.sellingController,
+                  skuController: v.skuController,
+                  barCodeController: v.barCodeController,
+                  discountController: v.discountController,
+                  stockController: v.stockController,
+                  manufactureDateController: v.manufactureDateController,
+                  expiryDateController: v.expiryDateController,
+                  selectedMaterial: v.selectedMaterial,
+                  selectedColor: v.selectedColor,
+                  selectedSize: v.selectedSize,
+                  selectedStatus: v.selectedStatus,
+                  onMaterialChanged: (val) => setState(() => v.selectedMaterial = val),
+                  onColorChanged: (val) => setState(() => v.selectedColor = val),
+                  onSizeChanged: (val) => setState(() => v.selectedSize = val),
+                  onStatusChanged: (val) => setState(() => v.selectedStatus = val),
+                  metaTitleController: v.metaTitleController,
+                  metaKeywordsController: v.metaKeywordsController,
+                  metaDescriptionController: v.metaDescriptionController,
+                  shortDescriptionController: v.shortDescriptionController,
+                  fullDescriptionController: v.fullDescriptionController,
+                  selectedImage: v.selectedImage != null ? File(v.selectedImage!.path) : null,
+                  onPickImage: () => _pickImage(index),
+                  imageError: v.imageError,
+                );
+              }),
+              AddNewSectionWidget(onTap: _addVariant),
+              const SizedBox(height: 30),
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: _saveProduct,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF27C840),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                        elevation: 0,
+                      ),
+                      child: const Text('Save Details', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
                     ),
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 30),
-          ],
+                ],
+              ),
+              const SizedBox(height: 40),
+            ],
+          ),
         ),
       ),
     );

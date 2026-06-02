@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'add_product_wudget.dart';
 
 class PricingVariantSection extends StatefulWidget {
@@ -35,6 +37,7 @@ class PricingVariantSection extends StatefulWidget {
 
   final File? selectedImage;
   final VoidCallback onPickImage;
+  final String? imageError;
 
   const PricingVariantSection({
     super.key,
@@ -67,6 +70,7 @@ class PricingVariantSection extends StatefulWidget {
     required this.fullDescriptionController,
     this.selectedImage,
     required this.onPickImage,
+    this.imageError,
   });
 
   @override
@@ -78,6 +82,8 @@ class _PricingVariantSectionState extends State<PricingVariantSection> {
 
   @override
   Widget build(BuildContext context) {
+    final String prefix = 'variant_${widget.index}_';
+
     return Container(
       padding: const EdgeInsets.all(20),
       margin: const EdgeInsets.only(bottom: 20),
@@ -193,7 +199,7 @@ class _PricingVariantSectionState extends State<PricingVariantSection> {
               child: Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  border: Border.all(color: const Color(0xFFE2E8F0)),
+                  border: Border.all(color: widget.imageError != null ? Colors.red : const Color(0xFFE2E8F0)),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Row(
@@ -235,11 +241,20 @@ class _PricingVariantSectionState extends State<PricingVariantSection> {
                 ),
               ),
             ),
+            if (widget.imageError != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 4, left: 4),
+                child: Text(
+                  widget.imageError!,
+                  style: const TextStyle(color: Colors.red, fontSize: 12),
+                ),
+              ),
             const SizedBox(height: 20),
             Row(
               children: [
                 Expanded(
                   child: CustomTextField(
+                    name: '${prefix}mrp',
                     label: 'MRP Price',
                     hintText: '0.00',
                     controller: widget.mrpController,
@@ -249,11 +264,17 @@ class _PricingVariantSectionState extends State<PricingVariantSection> {
                       child: Text('₹', style: TextStyle(color: Color(0xFF64748B), fontWeight: FontWeight.bold)),
                     ),
                     keyboardType: TextInputType.number,
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(errorText: 'MRP is required'),
+                      FormBuilderValidators.numeric(),
+                      FormBuilderValidators.min(0.01, errorText: 'MRP must be greater than 0'),
+                    ]),
                   ),
                 ),
                 const SizedBox(width: 15),
                 Expanded(
                   child: CustomTextField(
+                    name: '${prefix}cost',
                     label: 'Cost Price',
                     hintText: '0.00',
                     controller: widget.costController,
@@ -263,6 +284,19 @@ class _PricingVariantSectionState extends State<PricingVariantSection> {
                       child: Text('₹', style: TextStyle(color: Color(0xFF64748B), fontWeight: FontWeight.bold)),
                     ),
                     keyboardType: TextInputType.number,
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(errorText: 'Cost Price is required'),
+                      FormBuilderValidators.numeric(),
+                      FormBuilderValidators.min(0.01, errorText: 'Cost must be greater than 0'),
+                      (val) {
+                        final mrp = double.tryParse(widget.mrpController.text);
+                        final cost = double.tryParse(val ?? '');
+                        if (mrp != null && cost != null && cost >= mrp) {
+                          return 'Cost must be less than MRP';
+                        }
+                        return null;
+                      },
+                    ]),
                   ),
                 ),
               ],
@@ -272,6 +306,7 @@ class _PricingVariantSectionState extends State<PricingVariantSection> {
               children: [
                 Expanded(
                   child: CustomTextField(
+                    name: '${prefix}selling',
                     label: 'Selling Price',
                     hintText: '0.00',
                     controller: widget.sellingController,
@@ -281,11 +316,29 @@ class _PricingVariantSectionState extends State<PricingVariantSection> {
                       child: Text('₹', style: TextStyle(color: Color(0xFF64748B), fontWeight: FontWeight.bold)),
                     ),
                     keyboardType: TextInputType.number,
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(errorText: 'Selling Price is required'),
+                      FormBuilderValidators.numeric(),
+                      FormBuilderValidators.min(0.01, errorText: 'Selling Price must be greater than 0'),
+                      (val) {
+                        final mrp = double.tryParse(widget.mrpController.text);
+                        final cost = double.tryParse(widget.costController.text);
+                        final selling = double.tryParse(val ?? '');
+                        if (cost != null && selling != null && selling < cost) {
+                          return 'Selling Price should be ≥ Cost Price';
+                        }
+                        if (mrp != null && selling != null && selling > mrp) {
+                          return 'Selling price cannot be greater than MRP';
+                        }
+                        return null;
+                      },
+                    ]),
                   ),
                 ),
                 const SizedBox(width: 15),
                 Expanded(
                   child: CustomTextField(
+                    name: '${prefix}discount',
                     label: 'Discount (%)',
                     hintText: '0',
                     controller: widget.discountController,
@@ -299,11 +352,16 @@ class _PricingVariantSectionState extends State<PricingVariantSection> {
             SizedBox(
               width: 180,
               child: CustomTextField(
+                name: '${prefix}stock',
                 label: 'Total Stock',
                 hintText: '0',
                 controller: widget.stockController,
                 isMandatory: true,
                 keyboardType: TextInputType.number,
+                validator: FormBuilderValidators.compose([
+                  FormBuilderValidators.required(errorText: 'Stock is required'),
+                  FormBuilderValidators.numeric(),
+                ]),
               ),
             ),
             const SizedBox(height: 15),
@@ -311,16 +369,19 @@ class _PricingVariantSectionState extends State<PricingVariantSection> {
               children: [
                 Expanded(
                   child: CustomTextField(
+                    name: '${prefix}sku',
                     label: 'SKU',
                     hintText: 'SKU Code',
                     controller: widget.skuController,
-                    isMandatory: false,
+                    isMandatory: true,
                     keyboardType: TextInputType.text,
+                    validator: FormBuilderValidators.required(errorText: 'SKU is required'),
                   ),
                 ),
                 const SizedBox(width: 15),
                 Expanded(
                   child: CustomTextField(
+                    name: '${prefix}barcode',
                     label: 'Bar Code',
                     hintText: 'Barcode',
                     controller: widget.barCodeController,
@@ -337,10 +398,10 @@ class _PricingVariantSectionState extends State<PricingVariantSection> {
                 color: const Color(0xFFF5F3FF),
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: const Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
+                  const Text(
                     'FINAL CALCULATED PRICE',
                     style: TextStyle(
                       fontSize: 12,
@@ -349,8 +410,8 @@ class _PricingVariantSectionState extends State<PricingVariantSection> {
                     ),
                   ),
                   Text(
-                    '₹ 0',
-                    style: TextStyle(
+                    '₹ ${widget.sellingController.text.isEmpty ? '0' : widget.sellingController.text}',
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: Color(0xFF4338CA),
@@ -370,6 +431,7 @@ class _PricingVariantSectionState extends State<PricingVariantSection> {
             Column(
               children: [
                 CustomDropdownField(
+                  name: '${prefix}material',
                   label: 'Material',
                   hintText: 'Select Material',
                   value: widget.selectedMaterial,
@@ -378,6 +440,7 @@ class _PricingVariantSectionState extends State<PricingVariantSection> {
                 ),
                 const SizedBox(height: 20),
                 CustomDropdownField(
+                  name: '${prefix}color',
                   label: 'Color',
                   hintText: 'Select Color',
                   value: widget.selectedColor,
@@ -386,6 +449,7 @@ class _PricingVariantSectionState extends State<PricingVariantSection> {
                 ),
                 const SizedBox(height: 20),
                 CustomDropdownField(
+                  name: '${prefix}size',
                   label: 'Shirt Size',
                   hintText: 'Select Size',
                   value: widget.selectedSize,
@@ -396,18 +460,21 @@ class _PricingVariantSectionState extends State<PricingVariantSection> {
             ),
             const SizedBox(height: 20),
             CustomDateField(
+              name: '${prefix}manufacture_date',
               label: 'Manufacture Date (optional)',
               hintText: 'dd/mm/yyyy',
               controller: widget.manufactureDateController,
             ),
             const SizedBox(height: 20),
             CustomDateField(
+              name: '${prefix}expiry_date',
               label: 'Expiry Date (optional)',
               hintText: 'dd/mm/yyyy',
               controller: widget.expiryDateController,
             ),
             const SizedBox(height: 20),
             CustomDropdownField(
+              name: '${prefix}status',
               label: 'Variant Status',
               hintText: 'Active',
               value: widget.selectedStatus,
@@ -423,18 +490,21 @@ class _PricingVariantSectionState extends State<PricingVariantSection> {
             ),
             const SizedBox(height: 15),
             CustomTextField(
+              name: '${prefix}meta_title',
               label: 'Meta Title (optional)',
               hintText: 'Enter meta title...',
               controller: widget.metaTitleController,
             ),
             const SizedBox(height: 20),
             CustomTextField(
+              name: '${prefix}meta_keywords',
               label: 'Meta Keywords (optional)',
               hintText: 'e.g. shirt, cotton, blue',
               controller: widget.metaKeywordsController,
             ),
             const SizedBox(height: 20),
             CustomTextField(
+              name: '${prefix}meta_description',
               label: 'Meta Description (optional)',
               hintText: 'Enter meta description...',
               maxLines: 3,
@@ -442,6 +512,7 @@ class _PricingVariantSectionState extends State<PricingVariantSection> {
             ),
             const SizedBox(height: 20),
             CustomTextField(
+              name: '${prefix}short_description',
               label: 'Short Description',
               hintText: 'Write a short description for this variant...',
               maxLines: 4,
@@ -459,7 +530,8 @@ class _PricingVariantSectionState extends State<PricingVariantSection> {
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(color: const Color(0xFFE2E8F0)),
               ),
-              child: TextField(
+              child: FormBuilderTextField(
+                name: '${prefix}full_description',
                 maxLines: 8,
                 controller: widget.fullDescriptionController,
                 decoration: const InputDecoration(
@@ -476,4 +548,3 @@ class _PricingVariantSectionState extends State<PricingVariantSection> {
     );
   }
 }
-

@@ -10,6 +10,8 @@ class HSNSearchableDropdown extends StatefulWidget {
   final Function(HSNModel) onSelected;
   final bool isLoading;
 
+  final String? errorText;
+
   const HSNSearchableDropdown({
     super.key,
     required this.label,
@@ -19,6 +21,7 @@ class HSNSearchableDropdown extends StatefulWidget {
     this.isMandatory = false,
     this.selectedValue,
     this.isLoading = false,
+    this.errorText,
   });
 
   @override
@@ -69,7 +72,7 @@ class _HSNSearchableDropdownState extends State<HSNSearchableDropdown> {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: const Color(0xFFE2E8F0)),
+              border: Border.all(color: widget.errorText != null ? Colors.red : const Color(0xFFE2E8F0)),
             ),
             child: Row(
               children: [
@@ -91,6 +94,14 @@ class _HSNSearchableDropdownState extends State<HSNSearchableDropdown> {
             ),
           ),
         ),
+        if (widget.errorText != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 4, left: 4),
+            child: Text(
+              widget.errorText!,
+              style: const TextStyle(color: Colors.red, fontSize: 12),
+            ),
+          ),
       ],
     );
   }
