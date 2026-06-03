@@ -15,5 +15,5 @@ class AppStrings {
   static const String resendText = "Didn't receive the OTP?";
   static const String resendTimerPrefix = "Resend in ";
   static const String verifyOtp = "VERIFY OTP";
-  static const String bearerToken="4|I2zxR0z7hPCOvhUhLCNuuONyo3z6RHVFVhRX19UOacad0581";
+  static const String bearerToken="3|sUIQNP802xhOiq9TxeRqauR8Yo1blMucHjj4d68G9c380c01";
 }

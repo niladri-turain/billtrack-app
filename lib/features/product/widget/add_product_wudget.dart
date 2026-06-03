@@ -63,6 +63,7 @@ class CustomTextField extends StatelessWidget {
           validator: validator,
           onChanged: onChanged,
           decoration: InputDecoration(
+            isDense: true,
             hintText: hintText,
             prefixIcon: prefix,
             hintStyle: const TextStyle(color: Color(0xFF94A3B8), fontSize: 14),
@@ -143,6 +144,7 @@ class CustomDateField extends StatelessWidget {
           autovalidateMode: AutovalidateMode.onUserInteraction,
           validator: validator,
           decoration: InputDecoration(
+            isDense: true,
             hintText: hintText,
             suffixIcon: const Icon(Icons.calendar_today_outlined, size: 20, color: Color(0xFF64748B)),
             hintStyle: const TextStyle(color: Color(0xFF94A3B8), fontSize: 14),
@@ -158,6 +160,14 @@ class CustomDateField extends StatelessWidget {
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: const BorderSide(color: Color(0xFF4338CA), width: 1.5),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: Colors.red),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: Colors.red, width: 1.5),
             ),
           ),
         ),
@@ -219,10 +229,13 @@ class CustomDropdownField extends StatelessWidget {
           initialValue: value,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           validator: validator,
+          isExpanded: true,
           decoration: InputDecoration(
+
+            isDense: true,
             hintText: hintText,
             hintStyle: TextStyle(color: (isLoading || items.isEmpty) ? const Color(0xFF94A3B8) : Colors.black, fontSize: 14),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            // contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             filled: true,
             fillColor: Colors.white,
             errorStyle: const TextStyle(color: Colors.red, fontSize: 12),

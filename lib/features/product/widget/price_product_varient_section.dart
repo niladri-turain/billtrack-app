@@ -251,6 +251,7 @@ class _PricingVariantSectionState extends State<PricingVariantSection> {
               ),
             const SizedBox(height: 20),
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                   child: CustomTextField(
@@ -303,6 +304,7 @@ class _PricingVariantSectionState extends State<PricingVariantSection> {
             ),
             const SizedBox(height: 15),
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                   child: CustomTextField(
@@ -366,6 +368,7 @@ class _PricingVariantSectionState extends State<PricingVariantSection> {
             ),
             const SizedBox(height: 15),
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                   child: CustomTextField(
